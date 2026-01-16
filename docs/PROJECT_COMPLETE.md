@@ -222,16 +222,16 @@ Share this with friends who love:
 ## 📝 Complete File List
 
 ### **Documentation (10 files)**
-1. FINAL_SUMMARY.md - Complete overview
-2. IMPLEMENTATION_COMPLETE.md - Full implementation
-3. QUICKSTART.md - 5-minute start
-4. TESTNET_INTEGRATION.md - Testnet guide
-5. BENCHMARK_RESULTS.md - Performance analysis
-6. COMPLETE_TEST_REPORT.md - Test results
+1. docs/FINAL_SUMMARY.md - Complete overview
+2. docs/IMPLEMENTATION_COMPLETE.md - Full implementation
+3. docs/QUICKSTART.md - 5-minute start
+4. docs/TESTNET_INTEGRATION.md - Testnet guide
+5. docs/BENCHMARK_RESULTS.md - Performance analysis
+6. docs/COMPLETE_TEST_REPORT.md - Test results
 7. docs/DEPLOYMENT.md - Production deployment
 8. docs/ONNX_INTEGRATION.md - Vector embeddings
 9. docs/SAFETY_CHECK.md - Safety guide
-10. PROJECT_COMPLETE.md - This file!
+10. docs/PROJECT_COMPLETE.md - This file!
 
 ### **Core Code (21 Rust files)**
 - src/synthetic/ (4 files)

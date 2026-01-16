@@ -288,7 +288,7 @@ Once all tests pass:
 
 ### **Rust won't update?**
 - Try: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
-- Or: Check `LOCAL_TEST_GUIDE.md` for alternatives
+- Or: Check `docs/LOCAL_TEST_GUIDE.md` for alternatives
 
 ### **Tests fail?**
 - Run: `cargo test -- --nocapture` to see detailed output
@@ -302,10 +302,10 @@ Once all tests pass:
 
 ## 📚 Documentation Reference
 
-- **QUICKSTART.md** - 5-minute getting started
-- **TEST_NOW.md** - Detailed testing instructions
-- **LOCAL_TEST_GUIDE.md** - Troubleshooting guide
-- **FINAL_SUMMARY.md** - Complete implementation overview
+- **docs/QUICKSTART.md** - 5-minute getting started
+- **docs/TEST_NOW.md** - Detailed testing instructions
+- **docs/LOCAL_TEST_GUIDE.md** - Troubleshooting guide
+- **docs/FINAL_SUMMARY.md** - Complete implementation overview
 - **docs/DEPLOYMENT.md** - Production deployment guide
 
 ---

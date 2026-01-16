@@ -27,11 +27,11 @@
 - `contracts/NullOffice.sol` - Burn mechanism (60 lines)
 
 #### **Documentation (10 guides)**
-- `QUICKSTART.md` - 5-minute getting started
-- `FINAL_SUMMARY.md` - Complete overview
-- `IMPLEMENTATION_COMPLETE.md` - Full implementation details
-- `BENCHMARK_RESULTS.md` - Performance analysis
-- `COMPLETE_TEST_REPORT.md` - Test results
+- `docs/QUICKSTART.md` - 5-minute getting started
+- `docs/FINAL_SUMMARY.md` - Complete overview
+- `docs/IMPLEMENTATION_COMPLETE.md` - Full implementation details
+- `docs/BENCHMARK_RESULTS.md` - Performance analysis
+- `docs/COMPLETE_TEST_REPORT.md` - Test results
 - `docs/ONNX_INTEGRATION.md` - Vector embedding guide
 - `docs/SAFETY_CHECK.md` - Safety and testing
 - `docs/DEPLOYMENT.md` - Production deployment
@@ -208,9 +208,9 @@ Remote: origin (https://github.com/TeslaVortex/vortex-369-dao.git)
 ## 🔗 Quick Links
 
 - **Repository:** https://github.com/TeslaVortex/vortex-369-dao
-- **Quick Start:** https://github.com/TeslaVortex/vortex-369-dao/blob/master/QUICKSTART.md
-- **Benchmarks:** https://github.com/TeslaVortex/vortex-369-dao/blob/master/BENCHMARK_RESULTS.md
-- **Tests:** https://github.com/TeslaVortex/vortex-369-dao/blob/master/COMPLETE_TEST_REPORT.md
+- **Quick Start:** https://github.com/TeslaVortex/vortex-369-dao/blob/master/docs/QUICKSTART.md
+- **Benchmarks:** https://github.com/TeslaVortex/vortex-369-dao/blob/master/docs/BENCHMARK_RESULTS.md
+- **Tests:** https://github.com/TeslaVortex/vortex-369-dao/blob/master/docs/COMPLETE_TEST_REPORT.md
 - **Deployment:** https://github.com/TeslaVortex/vortex-369-dao/blob/master/docs/DEPLOYMENT.md
 
 ---

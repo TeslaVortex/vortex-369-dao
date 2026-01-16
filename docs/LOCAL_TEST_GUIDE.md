@@ -240,8 +240,8 @@ cd /home/pepo/Desktop/All/main-vortex-engine/vortex_369_dao
 [ -d src/governance ] && echo "✅ governance/ exists"
 [ -d src/embedding ] && echo "✅ embedding/ exists"
 [ -d contracts ] && echo "✅ contracts/ exists"
-[ -f QUICKSTART.md ] && echo "✅ QUICKSTART.md exists"
-[ -f FINAL_SUMMARY.md ] && echo "✅ FINAL_SUMMARY.md exists"
+[ -f docs/QUICKSTART.md ] && echo "✅ docs/QUICKSTART.md exists"
+[ -f docs/FINAL_SUMMARY.md ] && echo "✅ docs/FINAL_SUMMARY.md exists"
 
 # Count files
 echo "📊 Total Rust files: $(find src -name '*.rs' | wc -l)"
@@ -257,8 +257,8 @@ Expected output:
 ✅ governance/ exists
 ✅ embedding/ exists
 ✅ contracts/ exists
-✅ QUICKSTART.md exists
-✅ FINAL_SUMMARY.md exists
+✅ docs/QUICKSTART.md exists
+✅ docs/FINAL_SUMMARY.md exists
 📊 Total Rust files: 18
 📊 Total Solidity files: 4
 📊 Total docs: 7

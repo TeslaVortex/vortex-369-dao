@@ -110,13 +110,13 @@ We've built a **complete, production-ready governance system** in Rust that embo
 
 ### **3. Documentation (100% Complete)**
 
-1. **IMPLEMENTATION_COMPLETE.md** (465 lines)
+1. **docs/IMPLEMENTATION_COMPLETE.md** (465 lines)
    - Full implementation details
    - Spiritual context (3·6·9, 432 Hz)
    - Performance metrics
    - Roadmap
 
-2. **QUICKSTART.md** (350 lines)
+2. **docs/QUICKSTART.md** (350 lines)
    - 5-minute getting started
    - Step-by-step examples
    - Troubleshooting guide

@@ -636,7 +636,7 @@ cast call $NULL_OFFICE_ADDRESS "burnCount()(uint256)" --rpc-url $RPC_URL
 
 ### **Need Help?**
 - Check `docs/DEPLOYMENT.md` for detailed guide
-- Check `QUICKSTART.md` for basics
+- Check `docs/QUICKSTART.md` for basics
 - Check `docs/SAFETY_CHECK.md` for debugging
 
 ### **Found a Bug?**

@@ -9,7 +9,7 @@
 ### **Deployment Scripts**
 - ✅ `scripts/deploy_testnet.sh` - Automated deployment
 - ✅ `scripts/test_governance_cycle.sh` - Full cycle testing
-- ✅ `TESTNET_INTEGRATION.md` - Complete guide
+- ✅ `docs/TESTNET_INTEGRATION.md` - Complete guide
 
 ### **Smart Contracts**
 - ✅ `VortexDAOSimplified.sol` - 200 lines, minimal governance
@@ -180,10 +180,10 @@ echo "NullOffice: https://sepolia.basescan.org/address/$NULL_OFFICE_ADDRESS"
 
 ## 📚 Documentation
 
-- `TESTNET_INTEGRATION.md` - Complete integration guide
+- `docs/TESTNET_INTEGRATION.md` - Complete integration guide
 - `docs/DEPLOYMENT.md` - Detailed deployment instructions
-- `QUICKSTART.md` - Getting started
-- `COMPLETE_TEST_REPORT.md` - Test results
+- `docs/QUICKSTART.md` - Getting started
+- `docs/COMPLETE_TEST_REPORT.md` - Test results
 
 ---
 

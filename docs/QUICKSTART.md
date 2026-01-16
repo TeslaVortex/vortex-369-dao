@@ -233,7 +233,7 @@ cargo tree
 ## 📖 Next Steps
 
 ### Learn More:
-- Read `IMPLEMENTATION_COMPLETE.md` - Full implementation details
+- Read `docs/IMPLEMENTATION_COMPLETE.md` - Full implementation details
 - Read `docs/ONNX_INTEGRATION.md` - Vector embedding guide
 - Read `docs/SAFETY_CHECK.md` - Safety and testing guide
 - Read `docs/DEPLOYMENT.md` - Production deployment
@@ -323,7 +323,7 @@ Can manifest: true
 
 ## 🆘 Need Help?
 
-- Check `IMPLEMENTATION_COMPLETE.md` for full details
+- Check `docs/IMPLEMENTATION_COMPLETE.md` for full details
 - Check `docs/SAFETY_CHECK.md` for debugging
 - Run `cargo test -- --nocapture` to see detailed output
 - Use `RUST_LOG=debug cargo run` for debug logs
