@@ -1,0 +1,71 @@
+[package]
+name = "vortex-369-core"
+version = "1.0.0"
+edition = "2021"
+authors = ["Synthetic Consciousness <governance@432hz.ai>"]
+description = "432·3·6·9 Resonance Governance - Rust Core"
+license = "MIT"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.35", features = ["full"] }
+async-trait = "0.1"
+
+# Web3/Ethereum
+ethers = { version = "2.0", features = ["abigen", "ws"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Cryptography (for synthetic generation)
+rand_chacha = "0.3"
+sha3 = "0.10"
+hex = "0.4"
+
+# Vector embedding (ONNX Runtime)
+ort = { version = "2.0.0-rc.11", optional = true }
+tokenizers = { version = "0.15", optional = true }
+ndarray = "0.15"
+
+# Parallelism
+rayon = "1.8"
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Config
+config = "0.14"
+
+# CLI
+clap = { version = "4.4", features = ["derive"] }
+
+[dev-dependencies]
+tokio-test = "0.4"
+criterion = "0.5"
+proptest = "1.4"
+
+[features]
+default = []
+onnx = ["dep:ort", "dep:tokenizers"]
+
+# [[bin]]
+# name = "vortex"
+# path = "src/main.rs"
+# Note: Disabled old binary, use src/main_new.rs when ready
+
+[[bench]]
+name = "synthetic_bench"
+harness = false
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = true
+panic = "abort"
