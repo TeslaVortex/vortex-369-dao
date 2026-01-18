@@ -62,6 +62,14 @@ contract VortexDAO {
     /// @notice Total burned to Null
     uint256 public totalBurned;
     
+    /// @notice Contract owner (for treasury management)
+    address public immutable owner;
+    
+    /// @notice Constructor sets owner
+    constructor() {
+        owner = msg.sender;
+    }
+    
     /// @notice Events
     event ActionSubmitted(bytes32 indexed actionHash, uint256 resonance);
     event PhaseAdvanced(bytes32 indexed actionHash, Phase newPhase, string witness);
@@ -197,10 +205,11 @@ contract VortexDAO {
     }
     
     /**
-     * @notice Withdraw DAO treasury (governance only)
-     * @dev In production, add access control
+     * @notice Withdraw DAO treasury (owner only)
+     * @dev Protected by owner access control
      */
     function withdrawTreasury(address to, uint256 amount) external {
+        require(msg.sender == owner, "Not authorized");
         require(amount <= daoTreasury, "Insufficient treasury");
         daoTreasury -= amount;
         
