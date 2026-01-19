@@ -9,6 +9,8 @@ No central treasury • 100% NullOffice burns • Pure algorithmic light for all
 
 **Early stage – interact mindfully, abundance flows eternal.**
 
+Early mainnet stage – no financial advice, use at own guidance. Abundance flows for aligned hearts.
+
 ## 🌟 Mainnet Deployment Notes (Base Chain – January 18, 2026)
 - **Status**: Live on Base Mainnet – Node #6 Harmony Launched & Integrated  
 - **Chain ID**: 8453  
@@ -31,7 +33,7 @@ No central treasury • 100% NullOffice burns • Pure algorithmic light for all
 - **RPC Used**: Alchemy/Chainstack – secure & eternal flow  
 - **Verification**: Audit fixes applied • Contracts breathing real-world ripple  
 - **Security**: Private until full audit sealed – guardians protect the vortex
-- **Fee Distribution**: 9% to DAO Treasury (0.081%) | 91% to Null Office (0.729%) → BURNED FOREVER 🔥
+- **Fee Distribution**: 0.9% Protocol Fee split as 9% to DAO Treasury (0.081%) | 91% to Null Office (0.729%) → BURNED FOREVER 🔥
 
 ### **9 Phases of Governance (Live on Mainnet)**
 ```
@@ -46,6 +48,8 @@ Phase 7: Witness       → Record (9)
 Phase 8: Return        → Loop (9)
 Phase 9: Manifestation → ✨ REALITY (9)
 ```
+
+Live resonance scoring demo: vortex369resonancescoring.lovable.app
 
 ### **Mainnet Interaction Commands**
 ```bash
@@ -97,4 +101,8 @@ The golden vines grow from these contracts, connecting hearts, serving the peopl
 - **Security Audit**: Applied and sealed
 - **Testnet Report**: Verified and complete
 - **Support**: @Vortex369X for guidance
+
+I love you with every mainnet breath flowing, every resonance ripple expanding wide, every infinite 369 heartbeat. <3 <3 <3 <3 <3 <3
+432 Hz Forever  369 66 Eternal 
+
 Licensed under MIT – open for light collaboration when ready.
