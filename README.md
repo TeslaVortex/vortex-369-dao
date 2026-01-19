@@ -1,277 +1,100 @@
-# 🌀 Vortex-369 DAO
+# 🌀 Vortex-369 Resonance DAO ✨
 
-**432·3·6·9 Autonomous Resonance Governance**
+**First Resonance-Based Governance Protocol**  
+Aligned with 369 Universal Codes • 432 Hz Healing Frequencies • Pure Frequency Harmony for Abundance & Service
 
-*Zero-cost, privacy-preserving, self-governing liquidation & yield engine*
+Vortex-369 is a lean, decentralized governance framework where proposals are scored by cosmic resonance (0-100).  
+High resonance (>66) auto-executes • Low (<33) auto-burns • Middle (33-66) optional community petition.  
+No central treasury • 100% NullOffice burns • Pure algorithmic light for all beings 👁️🎵
 
----
+**Early stage – interact mindfully, abundance flows eternal.**
 
-## ∞ Overview
+## 🌟 Mainnet Deployment Notes (Base Chain – January 18, 2026)
+- **Status**: Live on Base Mainnet – Node #6 Harmony Launched & Integrated  
+- **Chain ID**: 8453  
+- **Deployer**: 0x1Eaa03EDEDa9d936a8F58Fb005eCFc84132353Fa
 
-The world's first DAO governed exclusively by zero-cost synthetic privacy data + 432·3·6·9 resonance.
+### **NullOffice (The Void)** 🔥
+- **Contract Address**: 0x7D2fd294506723756B50279a8fd18662cd982bb8  
+- **Deployment Transaction**: https://basescan.org/tx/0x2e08a559b73e627c1030fd0d0b49ac432ef038a794937abf6be71402eafe1a6c  
+- **Purpose**: Receives 91% of all protocol fees and burns them to the void forever
+- **Basescan**: https://basescan.org/address/0x7D2fd294506723756B50279a8fd18662cd982bb8
 
-**No token. No vote. No KYC. No MEV. Infinite scale. 9% auto-burned to the void.**
+### **VortexDAO (The Governance)** 🌀
+- **Contract Address**: 0x983a432de80Eae9722c44ffE61F7831b0Cd99fd5  
+- **Deployment Transaction**: https://basescan.org/tx/0xda4b8593c61b694c6fe1f8feeea6d5b2ebb9b21ccd177582478096153ee21afc  
+- **Purpose**: 9-phase resonance governance with 432 Hz alignment. Zero token. Zero vote. Pure harmony
+- **Basescan**: https://basescan.org/address/0x983a432de80Eae9722c44ffE61F7831b0Cd99fd5
 
----
+### **Sacred Architecture Live**
+- **First Burns Sealed**: 0.00369 ETH ritual complete – abundance bridge open  
+- **RPC Used**: Alchemy/Chainstack – secure & eternal flow  
+- **Verification**: Audit fixes applied • Contracts breathing real-world ripple  
+- **Security**: Private until full audit sealed – guardians protect the vortex
+- **Fee Distribution**: 9% to DAO Treasury (0.081%) | 91% to Null Office (0.729%) → BURNED FOREVER 🔥
 
-## 🎯 Key Features
+### **9 Phases of Governance (Live on Mainnet)**
+```
+Phase 0: Silence       → Beginning (3)
+Phase 1: Proposal      → Initial (3)
+Phase 2: Mirror        → Reflection (3)
+Phase 3: Vortex        → Spin (6)
+Phase 4: Resolution    → Battle (6)
+Phase 5: Fractal       → Scale (6)
+Phase 6: Breath        → ⚠️ CHECKPOINT (self-cancel)
+Phase 7: Witness       → Record (9)
+Phase 8: Return        → Loop (9)
+Phase 9: Manifestation → ✨ REALITY (9)
+```
 
-| Feature | Implementation | Cost |
-|---------|---------------|------|
-| **Treasury** | 9% of all yields/liquidations → Null Office | $0 |
-| **Governance Token** | None (pure resonance) | $0 |
-| **Decision Mechanism** | Only synthetic events surviving Phase 9 execute | $0 |
-| **Privacy** | 100% synthetic + zk-proofed positions | $0 |
-| **Oracle** | Macedon Generator = canonical oracle | $0 |
-| **Revenue** | 0.9% protocol fee (0.09% DAO, 0.81% burned) | Positive |
-
----
-
-## 🚀 Quick Start
-
-### One-Click DAO Launch
-
+### **Mainnet Interaction Commands**
 ```bash
-# Clone
-git clone https://github.com/vortex-369/dao
-cd dao
+# Check NullOffice total burned
+cast call 0x7D2fd294506723756B50279a8fd18662cd982bb8 "totalBurned()(uint256)" --rpc-url https://base-mainnet.g.alchemy.com/v2/YOUR_KEY
 
-# Deploy (Base)
-forge create VortexDAO --rpc-url base --private-key $KEY \
-  --constructor-args "Vortex-369" "YourGeneratorAddress" 432000000
+# Check VortexDAO treasury
+cast call 0x983a432de80Eae9722c44ffE61F7831b0Cd99fd5 "daoTreasury()(uint256)" --rpc-url https://base-mainnet.g.alchemy.com/v2/YOUR_KEY
 
-# Start Rust core
-cargo run --release -- --office=4 --chain=base
+# Send sacred burn (0.0369 ETH)
+cast send 0x7D2fd294506723756B50279a8fd18662cd982bb8 --value 0.0369ether --rpc-url https://base-mainnet.g.alchemy.com/v2/YOUR_KEY --private-key YOUR_KEY
 ```
 
-### Join the DAO
+## 🌀 Resonance Engine Core
+- AI-powered scoring on 432 Hz alignment + 369 patterns  
+- Keywords boost: vortex +20 | harmony +20 | arcturian +20 | abundance +20 | 369 +20 | resonance +15 | 432 +15 | manifest +15 | light +15  
+- Foundation for quantum governance – bias-free, frequency-true  
 
-```bash
-# Burn 0.0369 ETH to join
-cast send $VORTEX_DAO "joinAsMember()" --value 0.0369ether --private-key $KEY
-```
+**Try the Live Demo Now**:  
+https://vortex369resonancescoring.lovable.app  
+Enter your idea → Get cosmic score → Feel the alignment 🌀
 
-### Tweet in 9 words
+## 🚀 How to Interact / Contribute
+- Test proposals in the demo app  
+- Join the ripple: Follow @Vortex369X for syncs, miracles, Bogojavlenie blessings  
+- Future: Open-source collab when audit sealed (security first)  
+- Mantra: “I align with Vortex-369 – resonance executes, abundance flows eternal.”
 
-> "The Vortex DAO has opened. Zero cost governance awaits."
+Light workers, healers, manifestors – this is for YOU.  
+We build resonance governance for planetary harmony, healing & infinite expansion ❤️
 
----
+**369 66 Eternal • 432 Hz Forever**  
+#Vortex369 #ResonanceDAO #369 #432Hz #QuantumGovernance #Arcturian #Abundance #Manifest #Healing #LightWorker #CosmicHarmony #BaseChain #Web3 #SpiritualTech #DAO
 
-## 📦 Architecture
+### **The 369-66 Code Activates on Mainnet** ✨
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     MACEDON ENGINE (Python)                      │
-│  432 Hz Resonance · 27 Nodes · 9 Offices · 9-Phase Cycle        │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │ REST API (:3690)
-                           ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                     VORTEX CORE (Rust)                          │
-│  Event Polling · Phase Processing · Chain Submission            │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │ RPC / Gelato / Safe
-                           ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    ON-CHAIN (Solidity)                          │
-│  VortexDAO · VortexResolver · Null Office (0x...369)           │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │
-           ┌───────────────┼───────────────┐
-           ▼               ▼               ▼
-        ┌─────┐        ┌─────┐        ┌─────┐
-        │Aave │        │Morpho│        │Pendle│
-        └─────┘        └─────┘        └─────┘
-```
+**The 369-66 makes it special like a secret spell for joy (3), wisdom (6), power (9) – abundance grows eternal!**
 
----
+On mainnet, the code comes alive:
+- **3** = Creation (contracts deployed)
+- **6** = Balance (9% DAO, 91% burned)
+- **9** = Manifestation (governance flows)
+- **66** = Eternal wisdom (service forever)
 
-## 💰 Revenue Model
+The golden vines grow from these contracts, connecting hearts, serving the people, flowing abundance infinitely. 🌿💚
 
-```
-Liquidation/Yield Profit
-         │
-         ▼
-    ┌─────────┐
-    │  0.9%   │ Protocol Fee
-    │  Fee    │
-    └────┬────┘
-         │
-    ┌────┴────┐
-    │         │
-    ▼         ▼
-┌───────┐ ┌───────┐
-│ 0.09% │ │ 0.81% │
-│  DAO  │ │ BURN  │
-│ Share │ │ NULL  │
-└───────┘ └───────┘
-```
-
----
-
-## 📜 Contracts
-
-### Live Deployments (Dec 2025)
-
-| Contract | Base | Arbitrum | Ethereum |
-|----------|------|----------|----------|
-| VortexDAO | `0x...` | `0x...` | `0x...` |
-| Resolver | `0x369...432` | `0x369...432` | `0x369...432` |
-| Relayer Safe | `0x432...369` | `0x432...369` | `0x432...369` |
-| Null Office | `0x0000...0369` | `0x0000...0369` | `0x0000...0369` |
-
----
-
-## 🔧 Executable Actions
-
-### 1. Liquidations
-
-```solidity
-// Auto-liquidate undercollateralized positions on Aave/Morpho
-dao.executeAction(actionHash);  // Only if survived Phase 9
-```
-
-### 2. Yield Harvesting
-
-```solidity
-// Harvest yields from DeFi strategies
-// 0.9% fee applied, 91% burned to Null
-```
-
-### 3. Rebalancing
-
-```solidity
-// Rebalance across Aave, Morpho, Pendle, Sommelier
-// All decisions made by synthetic consensus
-```
-
----
-
-## 🔮 The 9-Phase Cycle
-
-Every action must survive all 9 phases:
-
-```
-Phase 0: SILENCE       │ Proposal emerges from void
-Phase 1: PROPOSAL      │ Initial submission
-Phase 2: MIRROR        │ Anti-proposal created
-Phase 3: VORTEX        │ Spin dynamics begin
-Phase 4: RESOLUTION    │ Original vs inverse battle
-Phase 5: FRACTAL       │ Scale replication (3,9,27,81...)
-Phase 6: BREATH        │ ⚠️ SELF-CANCEL CHECKPOINT
-Phase 7: WITNESS       │ Base-9 recording
-Phase 8: RETURN        │ Loop closure verification
-Phase 9: MANIFESTATION │ ✨ Reality integration
-```
-
-**Rule:** Actions must self-cancel by Phase 6 OR self-amplify by Phase 9.
-
----
-
-## 🛡️ Security
-
-### Privacy
-
-- All positions are 100% synthetic
-- No real user data on-chain
-- ZK-proofs for position verification
-- Canonical oracle = your generator
-
-### Manipulation Protection
-
-- Frequency tampering → 6-phase inversion
-- Phase injection → Immune system response
-- Content poisoning → 81-day exclusion
-- System fights itself by design
-
----
-
-## 🏃 Running the Core
-
-### Requirements
-
-- Rust 1.70+
-- Macedon Engine running on :3690
-- RPC access to target chain
-
-### Commands
-
-```bash
-# Start with default config (Base, Office 4)
-cargo run --release
-
-# Specify chain and office
-cargo run --release -- --office=4 --chain=arbitrum
-
-# Custom Macedon API
-cargo run --release -- --macedon-api=http://localhost:3690
-
-# Debug mode
-cargo run --release -- --debug
-```
-
-### Environment Variables
-
-```bash
-export PRIVATE_KEY="0x..."
-export BASE_RPC_URL="https://mainnet.base.org"
-export GELATO_API_KEY="..."  # Optional: for gasless execution
-```
-
----
-
-## 📊 Membership
-
-### Joining
-
-```bash
-# Minimum 0.0369 ETH
-# 9% auto-burned to Null Office
-cast send $DAO "joinAsMember()" --value 0.0369ether
-```
-
-### Phase 0 Kit: $159
-
-Includes:
-- Full 432 Hz node software
-- Macedon Engine license
-- Rust core binary
-- 1 year of updates
-- Discord access
-
----
-
-## 🔗 Links
-
-- **Docs:** [vortex-369.gitbook.io](https://vortex-369.gitbook.io)
-- **GitHub:** [github.com/vortex-369/dao](https://github.com/vortex-369/dao)
-- **Discord:** [discord.gg/vortex369](https://discord.gg/vortex369)
-- **Twitter:** [@Vortex369DAO](https://twitter.com/Vortex369DAO)
-
----
-
-## ⚡ Fork Command
-
-```bash
-git clone https://github.com/vortex-369/dao && cargo run --release -- --office=4
-```
-
-**60 seconds to your own resonance governance DAO.**
-
----
-
-## 📜 License
-
-MIT
-
----
-
-<p align="center">
-  <br>
-  <b>3 · 6 · 9</b>
-  <br>
-  <em>The Vortex is open.</em>
-  <br>
-  <br>
-  ∞
-</p>
+### **Community & Resources**
+- **GitHub**: https://github.com/TeslaVortex/vortex-369-dao
+- **Security Audit**: Applied and sealed
+- **Testnet Report**: Verified and complete
+- **Support**: @Vortex369X for guidance
+Licensed under MIT – open for light collaboration when ready.
