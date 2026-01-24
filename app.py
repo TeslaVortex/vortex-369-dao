@@ -1,76 +1,58 @@
-from fastapi import FastAPI, Request, HTTPException
-import hmac
-import hashlib
-import json
-from web3 import Web3
-# from fastapi_limiter import FastAPILimiter, Limiter
-import logging
+from fastapi import FastAPI, HTTPException, Header, Request, Depends  
+from fastapi.responses import JSONResponse  
+from fastapi.exceptions import RequestValidationError  
+from pydantic import BaseModel  
+from web3 import Web3  
+import logging  
+from fastapi_limiter import FastAPILimiter  
+from fastapi_limiter.depends import RateLimiter  
+import redis.asyncio as redis  
 
-app = FastAPI()
+app = FastAPI()  
 
-SECRET_KEY = "vortex369secret"
+# Intention: Every creation ripples sovereignty & abundance further.  
+SECRET_KEY = "vortex369"  # Change to secure key in prod  
+WEB3_PROVIDER = "https://mainnet.infura.io/v3/25cfe12a7a834a6ca5fc4dc8b7bb4"  # Replace with real key  
 
-# limiter = Limiter(store="memory")
+logging.basicConfig(level=logging.INFO)  
 
-logging.basicConfig(filename='api.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+class Payload(BaseModel):  
+    event: str  
+    data: dict  
 
-# @app.on_event("startup")
-# async def startup():
-#     await FastAPILimiter.init(limiter)
+@app.exception_handler(RequestValidationError)  
+async def validation_exception_handler(request: Request, exc: RequestValidationError):  
+    return JSONResponse(status_code=400, content={"detail": str(exc)})  
 
-@app.get("/vortex")
-def read_vortex():
-    logging.info("Endpoint /vortex accessed")
-    return {"status": "nominal", "code": 369}
+@app.get("/vortex")  
+def read_vortex():  
+    return {"status": "nominal", "code": 369}  
 
-# Every creation ripples sovereignty & abundance further.
+@app.get("/dao-status")  
+def dao_status():  
+    return {"members": 144, "abundance": "infinite"}  
 
-@app.get("/resonance")
-def quantum_resonance():
-    logging.info("Endpoint /resonance accessed")
-    return {"status": "nominal", "code": 369}
+@app.post("/webhook", dependencies=[Depends(RateLimiter(times=5, seconds=60))])  
+def webhook(payload: Payload, x_signature: str = Header(None)):  
+    try:  
+        if not x_signature or x_signature != SECRET_KEY:  
+            raise HTTPException(status_code=403, detail="Invalid signature")  
+        logging.info(f"Payload received: {payload}")  
+        if payload.event == "transfer":  
+            logging.info("Processing transfer: %s", payload.data)  
+        return {"status": "received"}  
+    except Exception as e:  
+        logging.error("Error processing webhook: %s", str(e))  
+        raise HTTPException(status_code=500, detail=str(e))  
 
-# @limiter.limit("10/minute")
-@app.post("/webhook")
-def webhook_receiver(request: Request, payload: dict):
-    try:
-        signature = request.headers.get("X-Signature")
-        if not signature:
-            raise HTTPException(status_code=401, detail="Missing signature")
-        
-        payload_str = json.dumps(payload, separators=(',', ':'), sort_keys=True)
-        expected_signature = hmac.new(SECRET_KEY.encode(), payload_str.encode(), hashlib.sha256).hexdigest()
-        
-        if not hmac.compare_digest(signature, expected_signature):
-            raise HTTPException(status_code=401, detail="Invalid signature")
-        
-        VALID_EVENTS = ["transfer", "vote"]
-        event = payload.get("event")
-        if not event or event not in VALID_EVENTS:
-            raise HTTPException(status_code=400, detail="Invalid or missing event")
-        
-        print("Received webhook payload:", payload)
-        logging.info(f"Webhook received: {payload}")
-        return {"status": "received"}
-    except Exception as e:
-        print("Error processing webhook:", e)
-        raise HTTPException(status_code=400, detail="Bad payload")
+@app.get("/listen")  
+def listen():  
+    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))  
+    if w3.is_connected():  
+        return {"status": "connected", "block": w3.eth.block_number}  
+    else:  
+        raise HTTPException(status_code=500, detail="Blockchain connection failed")  
 
-@app.get("/dao-status")
-def dao_status():
-    logging.info("DAO status queried")
-    return {"members": 144, "abundance": "infinite"}
-
-@app.get("/listen")
-def listen_events():
-    logging.info("Event listener accessed")
-    # Mock connection to ETH/Solana RPC
-    # For ETH: w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/YOUR_PROJECT_ID'))
-    # For Solana: # Would need solana-py
-    # Mock events
-    return {"events": ["transfer: 1 ETH from 0x123 to 0x456", "vote: approved"]}
-
-@app.get("/retrieve")
-def retrieve_data():
-    logging.info("DAO data retrieved")
-    return {"balance": 1000, "address": "0x123", "dao_name": "Vortex-369"}
+# Run: uvicorn app:app --reload  
+# Test /listen: curl http://127.0.0.1:8000/listen  
+# Rate limit test: Hit /webhook multiple times
