@@ -8,7 +8,13 @@ from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter  
 import redis.asyncio as redis  
 
-app = FastAPI()  
+app = FastAPI()
+
+limiter = Limiter(store="memory")
+
+@app.on_event("startup")
+async def startup():
+    await FastAPILimiter.init(limiter)  
 
 # Intention: Every creation ripples sovereignty & abundance further.  
 SECRET_KEY = "vortex369"  # Change to secure key in prod  
