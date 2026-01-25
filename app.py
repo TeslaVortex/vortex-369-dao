@@ -5,8 +5,10 @@ from pydantic import BaseModel
 from web3 import Web3  
 import logging  
 import asyncio
-# from fastapi_limiter import FastAPILimiter, Limiter  # Commented – 'Limiter' not in current version
-# from fastapi_limiter.depends import RateLimiter  # Commented – bypass for now  
+from fastapi_limiter import FastAPILimiter
+from fastapi_limiter.depends import RateLimiter
+import redis.asyncio as redis
+import os  
 import redis.asyncio as redis  
 
 app = FastAPI()
@@ -15,7 +17,6 @@ app = FastAPI()
 async def root():
     return {"status": "Vortex-369 Quantum Node Live – Resonance Sealed"}
 
-# limiter = Limiter(store="memory")
 
 latest_block = 0
 
@@ -70,9 +71,11 @@ async def event_listener():
 async def start_listener():
     asyncio.create_task(event_listener())
 
-# @app.on_event("startup")
-# async def startup():
-#     await FastAPILimiter.init(...)  # Commented – wrong args + import error  
+@app.on_event("startup")
+async def startup():
+    redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379")  # Fallback for local dev
+    redis_connection = redis.from_url(redis_url, encoding="utf-8", decode_responses=True)
+    await FastAPILimiter.init(redis_connection)  
 
 # Intention: Every creation ripples sovereignty & abundance further.  
 
@@ -94,8 +97,8 @@ def read_vortex():
 def dao_status():  
     return {"members": 144, "abundance": "infinite"}  
 
-@app.post("/webhook")  # Remove dependencies=[RateLimiter(...)] line or comment it  
-def webhook(payload: Payload, x_signature: str = Header(None)):  
+@app.post("/webhook")
+async def webhook(payload: Payload, x_signature: str = Header(None), rate_limiter: RateLimiter = Depends(RateLimiter(times=5, seconds=60))):  
     try:  
         if not x_signature or x_signature != SECRET_KEY:  
             raise HTTPException(status_code=403, detail="Invalid signature")  
