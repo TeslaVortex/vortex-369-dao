@@ -9,6 +9,8 @@ import asyncio
 # from fastapi_limiter.depends import RateLimiter  # Commented – bypass for now  
 import redis.asyncio as redis  
 
+SECRET_KEY = "vortex369"
+
 app = FastAPI()
 
 @app.get("/")
