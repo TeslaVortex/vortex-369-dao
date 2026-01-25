@@ -3,3 +3,4 @@ uvicorn[standard]
 web3
 python-dotenv
 fastapi-limiter
+redis
