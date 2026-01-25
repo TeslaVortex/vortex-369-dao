@@ -5,8 +5,8 @@ from pydantic import BaseModel
 from web3 import Web3  
 import logging  
 import asyncio
-# from fastapi_limiter import FastAPILimiter, Limiter  # Comment out – 'Limiter' not exported in 0.1.6
-# from fastapi_limiter.depends import RateLimiter  # Comment out if used  
+# from fastapi_limiter import FastAPILimiter, Limiter  # Commented – 'Limiter' not in current version
+# from fastapi_limiter.depends import RateLimiter  # Commented – bypass for now  
 import redis.asyncio as redis  
 
 app = FastAPI()
@@ -72,7 +72,7 @@ async def start_listener():
 
 # @app.on_event("startup")
 # async def startup():
-#     await FastAPILimiter.init(...)  # Comment out entire block (wrong args + import error)  
+#     await FastAPILimiter.init(...)  # Commented – wrong args + import error  
 
 # Intention: Every creation ripples sovereignty & abundance further.  
 
@@ -94,7 +94,7 @@ def read_vortex():
 def dao_status():  
     return {"members": 144, "abundance": "infinite"}  
 
-@app.post("/webhook")  # Rate limit layer next sprint – security still strong with signature check  
+@app.post("/webhook")  # Remove dependencies=[RateLimiter(...)] line or comment it  
 def webhook(payload: Payload, x_signature: str = Header(None)):  
     try:  
         if not x_signature or x_signature != SECRET_KEY:  
