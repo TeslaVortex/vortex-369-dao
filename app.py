@@ -10,15 +10,15 @@ import redis.asyncio as redis
 
 app = FastAPI()
 
-limiter = Limiter(store="memory")
+# limiter = Limiter(store="memory")
 
-@app.on_event("startup")
-async def startup():
-    await FastAPILimiter.init(limiter)  
+# @app.on_event("startup")
+# async def startup():
+#     await FastAPILimiter.init(limiter)  
 
 # Intention: Every creation ripples sovereignty & abundance further.  
 SECRET_KEY = "vortex369"  # Change to secure key in prod  
-WEB3_PROVIDER = "https://mainnet.infura.io/v3/25cfe12a7a834a6ca5fc4dc8b7bb4"  # Replace with real key  
+WEB3_PROVIDER = "https://mainnet.infura.io/v3/25cfe12a7a834a6caaa51c4dc06b7bb4"  # Replace with real key  
 
 logging.basicConfig(level=logging.INFO)  
 
