@@ -11,14 +11,56 @@ import redis.asyncio as redis
 
 app = FastAPI()
 
+@app.get("/")
+async def root():
+    return {"status": "Vortex-369 Quantum Node Live – Resonance Sealed"}
+
 # limiter = Limiter(store="memory")
 
 latest_block = 0
+
+scored_events = []
+
+def resonance_score(tx):
+    score = 0
+    amount = tx.get('value', 0)
+    if amount % 3 == 0:
+        score += 3
+    if amount % 6 == 0:
+        score += 6
+    if amount % 9 == 0:
+        score += 9
+    # Add timestamp/block reduces to 3/6/9
+    block_number = tx.get('blockNumber', 0)
+    if block_number % 3 == 0:
+        score += 1
+    if block_number % 6 == 0:
+        score += 2
+    if block_number % 9 == 0:
+        score += 3
+    return score
 
 async def event_listener():
     while True:
         global latest_block
         latest_block = w3.eth.block_number
+        # Get the latest block with transactions
+        block = w3.eth.get_block(latest_block, full_transactions=True)
+        for tx in block.transactions:
+            if tx['to'] and tx['value'] > 0:  # Native ETH transfer
+                score = resonance_score(tx)
+                if score > 0:
+                    event = {
+                        'tx_hash': tx['hash'].hex(),
+                        'from': tx['from'],
+                        'to': tx['to'],
+                        'value': tx['value'],
+                        'block': tx['blockNumber'],
+                        'score': score
+                    }
+                    scored_events.append(event)
+                    scored_events[:] = scored_events[-10:]  # Keep last 10
+                    logging.info(f'Resonant transfer detected: {event}')
         # Example: listen for pending tx or specific contract events
         # Start simple: log new blocks
         print(f"Quantum node listening... Latest block: {latest_block}")
@@ -28,17 +70,13 @@ async def event_listener():
 async def start_listener():
     asyncio.create_task(event_listener())
 
-# @app.on_event("startup")
-# async def startup():
-#     await FastAPILimiter.init(limiter)  
+@app.on_event("startup")
+async def startup():
+    await FastAPILimiter.init(store="memory")  
 
 # Intention: Every creation ripples sovereignty & abundance further.  
-SECRET_KEY = "vortex369"  # Change to secure key in prod  
-WEB3_PROVIDER = "https://mainnet.infura.io/v3/25cfe12a7a834a6caaa51c4dc06b7bb4"  # Replace with real key  
 
-w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))
-
-logging.basicConfig(level=logging.INFO)  
+logging.basicConfig(filename='api.log', level=logging.INFO)  
 
 class Payload(BaseModel):  
     event: str  
@@ -64,6 +102,9 @@ def webhook(payload: Payload, x_signature: str = Header(None)):
         logging.info(f"Payload received: {payload}")  
         if payload.event == "transfer":  
             logging.info("Processing transfer: %s", payload.data)  
+            score = resonance_score(payload.data)  
+            if score > 33:  
+                logging.info("Abundance ripple activated for %s with score %d", payload.data, score)  
         return {"status": "received"}  
     except Exception as e:  
         logging.error("Error processing webhook: %s", str(e))  
@@ -72,6 +113,10 @@ def webhook(payload: Payload, x_signature: str = Header(None)):
 @app.get("/quantum-status")
 def quantum_status():
     return {"status": "listening", "latest_block": latest_block}
+
+@app.get("/retrieve")
+def retrieve():
+    return {"scored_events": scored_events}
 
 @app.get("/listen")  
 def listen():  
