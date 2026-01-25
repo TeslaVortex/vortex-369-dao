@@ -115,6 +115,14 @@ def read_vortex():
 def dao_status():  
     return {"members": 144, "abundance": "infinite"}  
 
+@app.get("/listen")
+def listen():
+    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))
+    if w3.is_connected():
+        return {"status": "connected", "block": w3.eth.block_number}
+    else:
+        raise HTTPException(status_code=500, detail="Blockchain connection failed")
+
 @app.post("/webhook")  # Remove dependencies=[RateLimiter(...)] line or comment it  
 async def webhook(payload: Payload, x_signature: str = Header(None)):  
     # global redis_connection
