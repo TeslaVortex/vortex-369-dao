@@ -1,6 +1,5 @@
 fastapi
 uvicorn[standard]
-gunicorn
 web3
 python-dotenv
 fastapi-limiter
