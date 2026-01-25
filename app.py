@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from web3 import Web3  
 import logging  
 import asyncio
-from fastapi_limiter import FastAPILimiter  
+from fastapi_limiter import FastAPILimiter, Limiter  
 from fastapi_limiter.depends import RateLimiter  
 import redis.asyncio as redis  
 
@@ -15,7 +15,7 @@ app = FastAPI()
 async def root():
     return {"status": "Vortex-369 Quantum Node Live – Resonance Sealed"}
 
-# limiter = Limiter(store="memory")
+limiter = Limiter(store="memory")
 
 latest_block = 0
 
@@ -72,7 +72,7 @@ async def start_listener():
 
 @app.on_event("startup")
 async def startup():
-    await FastAPILimiter.init(store="memory")  
+    await FastAPILimiter.init(limiter)  
 
 # Intention: Every creation ripples sovereignty & abundance further.  
 
