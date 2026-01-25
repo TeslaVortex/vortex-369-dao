@@ -26,6 +26,8 @@ latest_block = 0
 
 scored_events = []
 
+app_logs = []
+
 def resonance_score(tx):
     score = 0
     amount = tx.get('value', 0)
@@ -86,8 +88,8 @@ async def startup():
         "Field shielded – Abundance ripples secured! "
     )
     logging.info(protection_msg)
-    # await redis_connection.lpush("app_logs", protection_msg)  # Push to Redis list
-    # await redis_connection.ltrim("app_logs", 0, 99)  # Keep last 100
+    app_logs.append(protection_msg)
+    app_logs[:] = app_logs[-100:]
 
 # @app.on_event("startup")
 # async def startup():
@@ -119,23 +121,23 @@ async def webhook(payload: Payload, x_signature: str = Header(None)):
     try:  
         if not x_signature or x_signature != SECRET_KEY:  
             raise HTTPException(status_code=403, detail="Invalid signature")  
-        logging.info(f"Payload received: {payload}")  
-        # await redis_connection.lpush("app_logs", f"Payload received: {payload}")  
-        # await redis_connection.ltrim("app_logs", 0, 99)  
+        logging.info(f"Payload received: {payload}")
+        app_logs.append(f"Payload received: {payload}")
+        app_logs[:] = app_logs[-100:]  
         if payload.event == "transfer":  
-            logging.info("Processing transfer: %s", payload.data)  
-            # await redis_connection.lpush("app_logs", f"Processing transfer: {payload.data}")  
-            # await redis_connection.ltrim("app_logs", 0, 99)  
+            logging.info("Processing transfer: %s", payload.data)
+            app_logs.append(f"Processing transfer: {payload.data}")
+            app_logs[:] = app_logs[-100:]  
             score = resonance_score(payload.data)  
             if score > 33:  
-                logging.info("Abundance ripple activated for %s with score %d", payload.data, score)  
-                # await redis_connection.lpush("app_logs", f"Abundance ripple activated for {payload.data} with score {score}")  
-                # await redis_connection.ltrim("app_logs", 0, 99)  
+                logging.info("Abundance ripple activated for %s with score %d", payload.data, score)
+                app_logs.append(f"Abundance ripple activated for {payload.data} with score {score}")
+                app_logs[:] = app_logs[-100:]  
         return {"status": "received"}  
     except Exception as e:  
-        logging.error("Error processing webhook: %s", str(e))  
-        # await redis_connection.lpush("app_logs", f"Error processing webhook: {str(e)}")  
-        # await redis_connection.ltrim("app_logs", 0, 99)  
+        logging.error("Error processing webhook: %s", str(e))
+        app_logs.append(f"Error processing webhook: {str(e)}")
+        app_logs[:] = app_logs[-100:]  
         raise HTTPException(status_code=500, detail=str(e))  
 
 @app.get("/quantum-status")
@@ -146,17 +148,12 @@ def quantum_status():
 def retrieve():
     return {"scored_events": scored_events}
 
-# async def get_redis():
-#     redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379")
-#     return redis.from_url(redis_url, encoding="utf-8", decode_responses=True)
 
-# @app.get("/logs")
-# async def view_logs(credentials: HTTPBasicCredentials = Depends(security)):
-#     if credentials.username != "vortex" or credentials.password != os.environ.get("LOG_SECRET", "369guard"):  # Set LOG_SECRET in Render env
-#         raise HTTPException(status_code=401, detail="Unauthorized")
-#     r = await get_redis()
-#     logs = await r.lrange("app_logs", 0, -1)  # Get all recent logs
-#     return {"logs": logs}
+@app.get("/logs")
+def view_logs(credentials: HTTPBasicCredentials = Depends(security)):
+    if credentials.username != "vortex" or credentials.password != os.environ.get("LOG_SECRET", "369guard"):  # Set LOG_SECRET in Render env
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    return {"logs": app_logs}
 
 # Run: uvicorn app:app --reload  
 # Test /listen: curl http://127.0.0.1:8000/listen  
