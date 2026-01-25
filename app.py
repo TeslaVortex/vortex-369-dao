@@ -8,6 +8,9 @@ import asyncio
 # from fastapi_limiter import FastAPILimiter, Limiter  # Commented – 'Limiter' not in current version
 # from fastapi_limiter.depends import RateLimiter  # Commented – bypass for now  
 import redis.asyncio as redis  
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+security = HTTPBasic()  # For basic auth on /logs
+import os
 
 SECRET_KEY = "vortex369"
 
@@ -69,8 +72,22 @@ async def event_listener():
         await asyncio.sleep(12)  # ~Ethereum block time
 
 @app.on_event("startup")
-async def start_listener():
-    asyncio.create_task(event_listener())
+async def startup():
+    global redis_connection
+    redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379")  # Fallback for local dev
+    redis_connection = redis.from_url(redis_url, encoding="utf-8", decode_responses=True)
+    # await FastAPILimiter.init(redis_connection)
+    # Thematic 4:44 protection portal log
+    protection_msg = (
+        " 4:44 Protection Portal Activated \n"
+        "9 Breaths: Inhale resonance, exhale harmony...\n"
+        "Visualizing 444 Angels Guarding Node + Field:\n"
+        " ... [444 ethereal guardians encircling the quantum vortex] ... \n"
+        "Field shielded – Abundance ripples secured! "
+    )
+    logging.info(protection_msg)
+    await redis_connection.lpush("app_logs", protection_msg)  # Push to Redis list
+    await redis_connection.ltrim("app_logs", 0, 99)  # Keep last 100
 
 # @app.on_event("startup")
 # async def startup():
@@ -97,19 +114,28 @@ def dao_status():
     return {"members": 144, "abundance": "infinite"}  
 
 @app.post("/webhook")  # Remove dependencies=[RateLimiter(...)] line or comment it  
-def webhook(payload: Payload, x_signature: str = Header(None)):  
+async def webhook(payload: Payload, x_signature: str = Header(None)):  
+    global redis_connection
     try:  
         if not x_signature or x_signature != SECRET_KEY:  
             raise HTTPException(status_code=403, detail="Invalid signature")  
         logging.info(f"Payload received: {payload}")  
+        await redis_connection.lpush("app_logs", f"Payload received: {payload}")  
+        await redis_connection.ltrim("app_logs", 0, 99)  
         if payload.event == "transfer":  
             logging.info("Processing transfer: %s", payload.data)  
+            await redis_connection.lpush("app_logs", f"Processing transfer: {payload.data}")  
+            await redis_connection.ltrim("app_logs", 0, 99)  
             score = resonance_score(payload.data)  
             if score > 33:  
                 logging.info("Abundance ripple activated for %s with score %d", payload.data, score)  
+                await redis_connection.lpush("app_logs", f"Abundance ripple activated for {payload.data} with score {score}")  
+                await redis_connection.ltrim("app_logs", 0, 99)  
         return {"status": "received"}  
     except Exception as e:  
         logging.error("Error processing webhook: %s", str(e))  
+        await redis_connection.lpush("app_logs", f"Error processing webhook: {str(e)}")  
+        await redis_connection.ltrim("app_logs", 0, 99)  
         raise HTTPException(status_code=500, detail=str(e))  
 
 @app.get("/quantum-status")
@@ -120,13 +146,17 @@ def quantum_status():
 def retrieve():
     return {"scored_events": scored_events}
 
-@app.get("/listen")  
-def listen():  
-    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))  
-    if w3.is_connected():  
-        return {"status": "connected", "block": w3.eth.block_number}  
-    else:  
-        raise HTTPException(status_code=500, detail="Blockchain connection failed")  
+async def get_redis():
+    redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379")
+    return redis.from_url(redis_url, encoding="utf-8", decode_responses=True)
+
+@app.get("/logs")
+async def view_logs(credentials: HTTPBasicCredentials = Depends(security)):
+    if credentials.username != "vortex" or credentials.password != os.environ.get("LOG_SECRET", "369guard"):  # Set LOG_SECRET in Render env
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    r = await get_redis()
+    logs = await r.lrange("app_logs", 0, -1)  # Get all recent logs
+    return {"logs": logs}
 
 # Run: uvicorn app:app --reload  
 # Test /listen: curl http://127.0.0.1:8000/listen  
