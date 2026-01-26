@@ -36,4 +36,11 @@ contract TreasuryVaultTest is Test {
         vm.expectRevert("Resonance score must be >66");
         vault.withdraw(0.5 ether, 50);
     }
+
+    function testFuzzDeposit(uint256 amount) public {
+        vm.assume(amount > 0 && amount < 100 ether);
+        vm.deal(address(this), amount);
+        vault.deposit{value: amount}();
+        assertEq(address(vault).balance, amount);
+    }
 }
