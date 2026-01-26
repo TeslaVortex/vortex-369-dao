@@ -1,7 +1,15 @@
-# Vortex-369 DAO 🚀
+## Vortex-369 DAO 🚀
 
 ## What is Vortex-369 DAO? 🚀
 Vortex-369 DAO is a fun group of builders syncing with the universe! We use special numbers like 3, 6, and 9 for good energy. This brings abundance, freedom, and cool vibes. Our app listens to the blockchain for transfers and events. It shares resonant moments that make everything flow better. Join the vortex for sovereignty and infinite wins! 🌌💚
+
+## Treasury Mechanism
+The Vortex-369 DAO Treasury extends the DAO with a secure vault for funds, governed by resonance scoring and Gnosis Safe multi-sig. Contracts in Solidity, tested with Foundry.
+
+- **TreasuryVault.sol**: Vault contract requiring resonance >66 for withdrawals.
+- **VortexDAO.sol**: Resonance scoring logic based on 369 principles.
+
+Run `forge test` for tests. Deployed on Base Sepolia.
 
 ## Quick Setup 🌟
 1. Get Python 3.12 on your computer.
@@ -30,3 +38,55 @@ Love the vortex? Help make it better!
 
 ## LFG Call-to-Action ∞
 Ready to sync and create? Join Vortex-369 DAO now! Contribute code, share ideas, or just vibe with the energy. Let's make the world resonant and free. LFG – En Eeke Mai Ea! 🇲🇰💚🎶💛∞
+
+
+
+### Build
+
+```shell
+$ forge build
+```
+
+### Test
+
+```shell
+$ forge test
+```
+
+### Format
+
+```shell
+$ forge fmt
+```
+
+### Gas Snapshots
+
+```shell
+$ forge snapshot
+```
+
+### Anvil
+
+```shell
+$ anvil
+```
+
+### Deploy
+
+```shell
+$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+```
+
+### Cast
+
+```shell
+$ cast <subcommand>
+```
+
+### Help
+
+```shell
+$ forge --help
+$ anvil --help
+$ cast --help
+```
