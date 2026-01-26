@@ -15,6 +15,12 @@ contract TreasuryVault is Ownable {
 
     function deposit() external payable {}
 
+    function distribute(address recipient, uint256 amount, uint256 resonanceScore) external onlyOwner {
+        require(address(this).balance >= amount, "Insufficient balance");
+        require(resonanceScore > 66, "Resonance score must be >66");
+        payable(recipient).transfer(amount);
+    }
+
     function withdraw(uint256 amount, uint256 resonanceScore) external onlyOwner {
         require(address(this).balance >= amount, "Insufficient balance");
         require(resonanceScore > 66, "Resonance score must be >66");
