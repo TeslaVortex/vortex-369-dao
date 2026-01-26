@@ -6,7 +6,7 @@ import json
 
 client = TestClient(app)
 
-SECRET_KEY = "vortex369secret"
+SECRET_KEY = "vortex369"
 
 def compute_signature(payload):
     payload_str = json.dumps(payload, separators=(',', ':'), sort_keys=True)
@@ -18,9 +18,8 @@ def test_vortex():
     assert response.json() == {"status": "nominal", "code": 369}
 
 def test_webhook():
-    payload = {"event": "transfer", "data": "sample"}
-    signature = compute_signature(payload)
-    response = client.post("/webhook", json=payload, headers={"X-Signature": signature})
+    payload = {"event": "transfer", "data": {"sample": "value"}}
+    response = client.post("/webhook", json=payload, headers={"X-Signature": SECRET_KEY})
     assert response.status_code == 200
     assert response.json() == {"status": "received"}
 
