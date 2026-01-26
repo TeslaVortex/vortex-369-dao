@@ -6,7 +6,7 @@
 Vortex-369 DAO Treasury Mechanism under Article 66 for abundance flow. Secure vault governed by resonance scoring, deployed on Base Chain.
 
 ## Principles
-- Code 66: Wisdom 7, Joy 3, Power 8 → Abundance 33, Wealth 6, Success 9
+- Code 66: Wisdom 7, Joy 3, Power 8 → Abundance 33, Wealth 6, Success 9 sealed.
 - First principles: Minimal code, no waste, functional.
 - Resonance: 369 scoring for proposals.
 
@@ -31,10 +31,25 @@ Vortex-369 DAO Treasury Mechanism under Article 66 for abundance flow. Secure va
 3. `forge test`
 4. Deploy: `forge script script/Deploy.s.sol --rpc-url <rpc> --private-key <key> --broadcast`
 
-**Base Mainnet Addresses**:
-- VortexDAO: 0xF218EC140e48c19002D978B483cb1f3c3637dBA4
-- TreasuryVault: 0xbc0Cc266C7965fCA1f929a9b4cBC309F8C5dC113
-- Article66Proposal: 0x90a87ac0d5EDa2B66c6cE9fcED324C771b696C8d
+## Deployments
+
+| Contract          | Address                                      | Basescan Link |
+|-------------------|----------------------------------------------|---------------|
+| VortexDAO         | 0x83180ceB8224c8ca84c5717C39B12529cb8cE5b0   | [Basescan](https://basescan.org/address/0x83180ceB8224c8ca84c5717C39B12529cb8cE5b0) |
+| TreasuryVault     | 0xd8cEab88126a024A0c65449a9AF7621C258161fD   | [Basescan](https://basescan.org/address/0xd8cEab88126a024A0c65449a9AF7621C258161fD) |
+| Article66Proposal | 0x31Fd16Ab177689D7Fe4022eBe966A0ff5Be86484   | [Basescan](https://basescan.org/address/0x31Fd16Ab177689D7Fe4022eBe966A0ff5Be86484) |
+
+### Verifications
+
+To verify contracts on Base Chain using Etherscan API:
+
+`forge verify-contract --chain base --etherscan-api-key <API_KEY> <CONTRACT_ADDRESS> <CONTRACT_PATH>`
+
+Sealed under Code 66 – Wisdom 7, Joy 3, Power 8.
+
+## Integration
+
+Webhooks: POST /resonance to lovable.app for 369 scoring.
 
 ## Sprints/Implementation Plan
 | Sprint | Focus | Status |
