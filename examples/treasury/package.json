@@ -1,0 +1,15 @@
+{
+  "name": "treasury-ui",
+  "version": "1.0.0",
+  "description": "Minimal Next.js UI for Vortex-369 DAO Treasury",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+}

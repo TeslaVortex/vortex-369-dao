@@ -23,21 +23,23 @@ contract Article66ProposalTest is Test {
     function testPropose() public {
         string memory desc = "Fund the 369 project with 66 ETH for abundance";
         proposalContract.propose(desc, 1 ether, recipient);
-        (address proposer, string memory description, uint256 amount, address rec, uint256 score, bool executed) = proposalContract.proposals(0);
+        (address proposer, string memory description, uint256 amount, address rec, uint256 score, uint256 queuedTime, bool executed) = proposalContract.proposals(0);
         assertEq(proposer, address(this));
         assertEq(amount, 1 ether);
         assertEq(rec, recipient);
         assertEq(executed, false);
-        assert(score > 0); // Should have score due to keywords
+        assert(score > 0);
+        assertGt(queuedTime, 0); // Since score >66
     }
 
     function testExecuteHighScore() public {
         vm.deal(address(vault), 2 ether);
         string memory desc = "369 project funding for 66 abundance";
         proposalContract.propose(desc, 1 ether, recipient);
-        // Assume score >66
-        proposalContract.execute(0);
-        (,,,,, bool executed) = proposalContract.proposals(0);
+        // Advance time past the 9-hour delay
+        vm.warp(block.timestamp + 9 hours + 1);
+        proposalContract.executeQueued(0);
+        (,,,,,, bool executed) = proposalContract.proposals(0);
         assert(executed);
         assertEq(address(vault).balance, 1 ether);
     }
@@ -46,8 +48,8 @@ contract Article66ProposalTest is Test {
         vm.deal(address(vault), 2 ether);
         string memory desc = "Normal project";
         proposalContract.propose(desc, 1 ether, recipient);
-        // Assume score <=66
-        vm.expectRevert("Score not >66");
-        proposalContract.execute(0);
+        // Score <=66, so not queued
+        vm.expectRevert("Proposal not queued for execution");
+        proposalContract.executeQueued(0);
     }
 }

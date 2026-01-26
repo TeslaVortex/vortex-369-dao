@@ -8,12 +8,15 @@ contract Article66Proposal {
     VortexDAO public vortexDAO;
     TreasuryVault public treasuryVault;
 
+    uint256 constant DELAY = 9 hours;
+
     struct Proposal {
         address proposer;
         string description;
         uint256 amount;
         address recipient;
         uint256 score;
+        uint256 queuedTime;
         bool executed;
     }
 
@@ -30,7 +33,8 @@ contract Article66Proposal {
 
     function propose(string memory desc, uint256 amount, address recipient) public {
         uint256 score = calculateScore(desc, amount, block.number);
-        proposals[nextId] = Proposal(msg.sender, desc, amount, recipient, score, false);
+        uint256 queuedTime = score > 66 ? block.timestamp + DELAY : 0;
+        proposals[nextId] = Proposal(msg.sender, desc, amount, recipient, score, queuedTime, false);
         emit ProposalCreated(nextId, msg.sender, desc, amount, recipient, score);
         nextId++;
     }
@@ -62,10 +66,11 @@ contract Article66Proposal {
         return false;
     }
 
-    function execute(uint256 id) public {
+    function executeQueued(uint256 id) public {
         Proposal storage p = proposals[id];
+        require(p.queuedTime > 0, "Proposal not queued for execution");
+        require(block.timestamp >= p.queuedTime, "Timelock not expired");
         require(!p.executed, "Already executed");
-        require(p.score > 66, "Score not >66");
         treasuryVault.distribute(p.recipient, p.amount, p.score);
         p.executed = true;
         emit ProposalExecuted(id);
