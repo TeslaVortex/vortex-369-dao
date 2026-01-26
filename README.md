@@ -47,6 +47,10 @@ To verify contracts on Base Chain using Etherscan API:
 
 Sealed under Code 66 – Wisdom 7, Joy 3, Power 8.
 
+## Integration
+
+Webhooks: POST /resonance to lovable.app for 369 scoring.
+
 ## Sprints/Implementation Plan
 | Sprint | Focus | Status |
 |--------|-------|--------|
