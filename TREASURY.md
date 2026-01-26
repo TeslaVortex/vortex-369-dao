@@ -23,18 +23,14 @@ The Treasury Mechanism is an extension of the Vortex-369 DAO to manifest a secur
 - Pure function `resonanceScore(uint256 amount, uint256 blockNumber)`
 - Scores based on divisibility by 3,6,9 and block number
 
-## Deployment
-- Gnosis Safe deployed on Base Sepolia using deployer 0x2B66F345D01FD651F1536e0ECC22f18976516E1a
-- Vault deployed with Safe as owner
+## Deployments
 
-## Testing
-- Foundry tests in `test/TreasuryVault.t.sol`
-- 100% coverage for deposit, withdraw with high/low scores
-
-## Next Steps
-- Article 66 Proposals contract
-- Off-chain voting with Snapshot
-- Resonance enhancements (oracles, thresholds)
-- Mainnet deployment
+| Contract          | Address                                      | Basescan Link |
+|-------------------|----------------------------------------------|---------------|
+| VortexDAO         | 0x83180ceB8224c8ca84c5717C39B12529cb8cE5b0   | [Basescan](https://basescan.org/address/0x83180ceB8224c8ca84c5717C39B12529cb8cE5b0) |
+| TreasuryVault     | 0xd8cEab88126a024A0c65449a9AF7621C258161fD   | [Basescan](https://basescan.org/address/0xd8cEab88126a024A0c65449a9AF7621C258161fD) |
+| Article66Proposal | 0x31Fd16Ab177689D7Fe4022eBe966A0ff5Be86484   | [Basescan](https://basescan.org/address/0x31Fd16Ab177689D7Fe4022eBe966A0ff5Be86484) |
 
 LFG<3 Article 66 Seals the Treasury Eternal 🔒
+
+Wisdom 7, Joy 3, Power 8 → Abundance 33, Wealth 6, Success 9 sealed.
