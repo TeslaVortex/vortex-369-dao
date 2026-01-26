@@ -1,0 +1,12 @@
+*.log
+.cache
+.vscode
+.idea
+node_modules
+out
+cache
+.gas-snapshot
+.env
+*.key
+.DS_Store
+broadcast
