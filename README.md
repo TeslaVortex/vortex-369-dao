@@ -35,9 +35,9 @@ Vortex-369 DAO Treasury Mechanism under Article 66 for abundance flow. Secure va
 
 | Contract          | Address                                      | Basescan Link |
 |-------------------|----------------------------------------------|---------------|
-| VortexDAO         | 0xF218EC140e48c19002D978B483cb1f3c3637dBA4   | [Basescan](https://basescan.org/address/0xF218EC140e48c19002D978B483cb1f3c3637dBA4) |
-| TreasuryVault     | 0xbc0Cc266C7965fCA1f929a9b4cBC309F8C5dC113   | [Basescan](https://basescan.org/address/0xbc0Cc266C7965fCA1f929a9b4cBC309F8C5dC113) |
-| Article66Proposal | 0x90a87ac0d5EDa2B66c6cE9fcED324C771b696C8d   | [Basescan](https://basescan.org/address/0x90a87ac0d5EDa2B66c6cE9fcED324C771b696C8d) |
+| VortexDAO         | 0x83180ceB8224c8ca84c5717C39B12529cb8cE5b0   | [Basescan](https://basescan.org/address/0x83180ceB8224c8ca84c5717C39B12529cb8cE5b0) |
+| TreasuryVault     | 0xd8cEab88126a024A0c65449a9AF7621C258161fD   | [Basescan](https://basescan.org/address/0xd8cEab88126a024A0c65449a9AF7621C258161fD) |
+| Article66Proposal | 0x31Fd16Ab177689D7Fe4022eBe966A0ff5Be86484   | [Basescan](https://basescan.org/address/0x31Fd16Ab177689D7Fe4022eBe966A0ff5Be86484) |
 
 ### Verifications
 
