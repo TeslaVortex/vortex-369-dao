@@ -31,10 +31,21 @@ Vortex-369 DAO Treasury Mechanism under Article 66 for abundance flow. Secure va
 3. `forge test`
 4. Deploy: `forge script script/Deploy.s.sol --rpc-url <rpc> --private-key <key> --broadcast`
 
-**Base Mainnet Addresses**:
-- VortexDAO: 0xF218EC140e48c19002D978B483cb1f3c3637dBA4
-- TreasuryVault: 0xbc0Cc266C7965fCA1f929a9b4cBC309F8C5dC113
-- Article66Proposal: 0x90a87ac0d5EDa2B66c6cE9fcED324C771b696C8d
+## Deployments
+
+| Contract          | Address                                      | Basescan Link |
+|-------------------|----------------------------------------------|---------------|
+| VortexDAO         | 0xF218EC140e48c19002D978B483cb1f3c3637dBA4   | [Basescan](https://basescan.org/address/0xF218EC140e48c19002D978B483cb1f3c3637dBA4) |
+| TreasuryVault     | 0xbc0Cc266C7965fCA1f929a9b4cBC309F8C5dC113   | [Basescan](https://basescan.org/address/0xbc0Cc266C7965fCA1f929a9b4cBC309F8C5dC113) |
+| Article66Proposal | 0x90a87ac0d5EDa2B66c6cE9fcED324C771b696C8d   | [Basescan](https://basescan.org/address/0x90a87ac0d5EDa2B66c6cE9fcED324C771b696C8d) |
+
+### Verifications
+
+To verify contracts on Base Chain using Etherscan API:
+
+`forge verify-contract --chain base --etherscan-api-key <API_KEY> <CONTRACT_ADDRESS> <CONTRACT_PATH>`
+
+Sealed under Code 66 – Wisdom 7, Joy 3, Power 8.
 
 ## Sprints/Implementation Plan
 | Sprint | Focus | Status |
