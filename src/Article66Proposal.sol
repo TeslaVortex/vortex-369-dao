@@ -39,7 +39,7 @@ contract Article66Proposal {
         nextId++;
     }
 
-    function calculateScore(string memory desc, uint256 amount, uint256 blockNum) internal view returns (uint256) {
+    function calculateScore(string memory desc, uint256 amount, uint256 blockNum) public view returns (uint256) {
         uint256 baseScore = vortexDAO.resonanceScore(amount, blockNum);
         // Boost for keywords
         uint256 boost = 0;

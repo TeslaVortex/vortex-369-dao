@@ -6,7 +6,7 @@
 Vortex-369 DAO Treasury Mechanism under Article 66 for abundance flow. Secure vault governed by resonance scoring, deployed on Base Chain.
 
 ## Principles
-- Code 66: Wisdom 7, Joy 3, Power 8 → Abundance 33, Wealth 6, Success 9
+- Code 66: Wisdom 7, Joy 3, Power 8 → Abundance 33, Wealth 6, Success 9 sealed.
 - First principles: Minimal code, no waste, functional.
 - Resonance: 369 scoring for proposals.
 

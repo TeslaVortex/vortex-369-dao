@@ -15,7 +15,7 @@ contract Article66ProposalTest is Test {
 
     function setUp() public {
         vortexDAO = new VortexDAO();
-        vault = new TreasuryVault(address(this), address(vortexDAO)); // temp owner
+        vault = new TreasuryVault(address(this), address(vortexDAO), address(0)); // temp owner
         proposalContract = new Article66Proposal(address(vortexDAO), payable(address(vault)));
         vault.transferOwnership(address(proposalContract));
     }
@@ -51,5 +51,66 @@ contract Article66ProposalTest is Test {
         // Score <=66, so not queued
         vm.expectRevert("Proposal not queued for execution");
         proposalContract.executeQueued(0);
+    }
+
+    function testProposeWith369() public {
+        string memory desc = "369 432 abundance project";
+        proposalContract.propose(desc, 1 ether, recipient);
+        (,,,, uint256 score,,) = proposalContract.proposals(0);
+        assertGt(score, 66); // Boosted
+    }
+
+    function testProposeWith432() public {
+        string memory desc = "432 369 harmony project";
+        proposalContract.propose(desc, 1 ether, recipient);
+        (,,,, uint256 score,,) = proposalContract.proposals(0);
+        assertGt(score, 66);
+    }
+
+    function testProposeWith66() public {
+        string memory desc = "66 wealth project";
+        proposalContract.propose(desc, 1 ether, recipient);
+        (,,,, uint256 score,,) = proposalContract.proposals(0);
+        assertEq(score, 50);
+    }
+
+    function testCalculateScoreNoBoost() public {
+        string memory desc = "Normal project";
+        uint256 score = proposalContract.calculateScore(desc, 369, 1000);
+        assertEq(score, 12); // Base score for 369 at block 1000
+    }
+
+    function testCalculateScoreWithBoost() public {
+        string memory desc = "369 project";
+        uint256 score = proposalContract.calculateScore(desc, 369, 1000);
+        assertEq(score, 62); // 12 +50
+    }
+
+    function testExecuteQueuedBeforeTimelock() public {
+        vm.deal(address(vault), 2 ether);
+        string memory desc = "369 432 66 project funding";
+        proposalContract.propose(desc, 1 ether, recipient);
+        vm.expectRevert("Timelock not expired");
+        proposalContract.executeQueued(0);
+    }
+
+    function testExecuteNotQueued() public {
+        vm.expectRevert("Proposal not queued for execution");
+        proposalContract.executeQueued(0);
+    }
+
+    function testProposeEmptyDesc() public {
+        string memory desc = "";
+        proposalContract.propose(desc, 1 ether, recipient);
+        (,,,, uint256 score,,) = proposalContract.proposals(0);
+        assertGe(score, 0);
+    }
+
+    function testFuzzPropose(uint256 amount) public {
+        vm.assume(amount > 0 && amount < 100 ether);
+        string memory desc = "Fuzz test proposal";
+        proposalContract.propose(desc, amount, recipient);
+        (,,,, uint256 score,,) = proposalContract.proposals(0);
+        assertGe(score, 0);
     }
 }
