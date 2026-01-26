@@ -14,7 +14,7 @@ contract Deploy is Script {
         VortexDAO vortexDAO = new VortexDAO();
 
         // Deploy TreasuryVault with deployer as temp owner
-        TreasuryVault vault = new TreasuryVault(msg.sender, address(vortexDAO));
+        TreasuryVault vault = new TreasuryVault(msg.sender, address(vortexDAO), address(0)); // placeholder
 
         // Deploy Article66Proposal
         Article66Proposal proposal = new Article66Proposal(address(vortexDAO), payable(address(vault)));
