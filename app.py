@@ -15,7 +15,7 @@ import time
 
 SECRET_KEY = "vortex369"
 
-WEB3_PROVIDER = os.environ.get("WEB3_PROVIDER", "https://base-mainnet.infura.io/v3/25cfe12a7a834a6caaa51c4dc06b7bb4")
+WEB3_PROVIDER_URL = os.environ.get("WEB3_PROVIDER_URL", "https://base-mainnet.infura.io/v3/25cfe12a7a834a6caaa51c4dc06b7bb4")
 DAO_TREASURY_ADDRESS = os.environ.get("DAO_TREASURY_ADDRESS", "0xd8cEab88126a024A0c65449a9AF7621C258161fD")
 
 PROPOSAL_CONTRACT_ADDRESS = "0x31Fd16Ab177689D7Fe4022eBe966A0ff5Be86484"
@@ -96,7 +96,7 @@ async def startup():
     redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379")  # Fallback for local dev
     redis_connection = redis.from_url(redis_url, encoding="utf-8", decode_responses=True)
     await FastAPILimiter.init(redis_connection)
-    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))
+    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER_URL))
     if not w3.is_connected():
         raise ValueError("Web3 not connected")
     private_key = os.getenv('DAO_PRIVATE_KEY')
@@ -147,7 +147,7 @@ def dao_status():
 
 @app.get("/listen")
 def listen():
-    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))
+    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER_URL))
     if w3.is_connected():
         return {"status": "connected", "block": w3.eth.block_number}
     else:
@@ -198,7 +198,7 @@ def get_balance():
     now = time.time()
     if now - cached_balance["timestamp"] < CACHE_TTL and cached_balance["value"]:
         return cached_balance["value"]
-    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))
+    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER_URL))
     if not w3.is_connected():
         raise HTTPException(status_code=500, detail="Blockchain connection failed")
     balance_wei = w3.eth.get_balance(DAO_TREASURY_ADDRESS)
@@ -210,7 +210,7 @@ def get_balance():
 
 @app.get("/transactions", dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 def get_transactions(limit: int = Query(10, ge=1, le=50)):
-    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))
+    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER_URL))
     if not w3.is_connected():
         raise HTTPException(status_code=500, detail="Blockchain connection failed")
     current_block = w3.eth.block_number
