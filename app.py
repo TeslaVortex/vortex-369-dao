@@ -5,7 +5,8 @@ from pydantic import BaseModel
 from web3 import Web3  
 import logging  
 import asyncio
-from fastapi_limiter import FastAPILimiter, Limiter  
+from fastapi_limiter import FastAPILimiter
+from fastapi_limiter.depends import RateLimiter  
 import redis.asyncio as redis  
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 security = HTTPBasic()  # For basic auth on /logs
@@ -24,7 +25,7 @@ async def root():
     return {"status": "Vortex-369 Quantum Node Live – Resonance Sealed"}
 
 # limiter = Limiter(store="memory")
-limiter = Limiter(store="redis")
+
 
 latest_block = 0
 
@@ -180,9 +181,8 @@ def view_logs(credentials: HTTPBasicCredentials = Depends(security)):
         raise HTTPException(status_code=401, detail="Unauthorized")
     return {"logs": app_logs}
 
-@limiter.limit("10/minute")
 @app.get("/balance")
-def get_balance():
+def get_balance(rate_limit: None = Depends(RateLimiter(times=10, seconds=60))):
     now = time.time()
     if now - cached_balance["timestamp"] < CACHE_TTL and cached_balance["value"]:
         return cached_balance["value"]
@@ -196,9 +196,8 @@ def get_balance():
     cached_balance["timestamp"] = now
     return result
 
-@limiter.limit("10/minute")
 @app.get("/transactions")
-def get_transactions(limit: int = Query(10, ge=1, le=50)):
+def get_transactions(limit: int = Query(10, ge=1, le=50), rate_limit: None = Depends(RateLimiter(times=10, seconds=60))):
     w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))
     if not w3.is_connected():
         raise HTTPException(status_code=500, detail="Blockchain connection failed")
@@ -228,9 +227,8 @@ def get_transactions(limit: int = Query(10, ge=1, le=50)):
             raise HTTPException(status_code=500, detail=f"Error fetching block {block_num}: {str(e)}")
     return {"transactions": transactions}
 
-@limiter.limit("10/minute")
 @app.post("/proposals")
-def submit_proposal(proposal: Proposal):
+def submit_proposal(proposal: Proposal, rate_limit: None = Depends(RateLimiter(times=10, seconds=60))):
     proposal_id = len(proposals) + 1
     new_proposal = {
         "id": proposal_id,
@@ -256,9 +254,8 @@ def list_proposals():
             proposal["status"] = "active"
     return {"proposals": proposals}
 
-@limiter.limit("10/minute")
 @app.post("/proposals/{proposal_id}/vote")
-def vote_on_proposal(proposal_id: int, voter: str = Form(...), vote: str = Form(...)):
+def vote_on_proposal(proposal_id: int, voter: str = Form(...), vote: str = Form(...), rate_limit: None = Depends(RateLimiter(times=10, seconds=60))):
     if vote not in ["yes", "no"]:
         raise HTTPException(status_code=400, detail="Vote must be yes or no")
     for proposal in proposals:

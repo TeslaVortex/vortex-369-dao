@@ -2,5 +2,5 @@ fastapi
 uvicorn[standard]
 web3
 python-dotenv
-fastapi-limiter
+fastapi-limiter>=0.2.0
 redis
