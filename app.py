@@ -1,11 +1,11 @@
-from fastapi import FastAPI, HTTPException, Header, Request, Depends, Query  
+from fastapi import FastAPI, HTTPException, Header, Request, Depends, Query, Form  
 from fastapi.responses import JSONResponse  
 from fastapi.exceptions import RequestValidationError  
 from pydantic import BaseModel  
 from web3 import Web3  
 import logging  
 import asyncio
-from fastapi_limiter import FastAPILimiter, Limiter
+from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter  
 import redis.asyncio as redis  
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -36,6 +36,8 @@ redis_connection = None
 
 cached_balance = {"value": None, "timestamp": 0}
 CACHE_TTL = 30
+
+proposals = []
 
 def resonance_score(tx):
     score = 0
@@ -111,6 +113,12 @@ logging.basicConfig(filename='api.log', level=logging.INFO)
 class Payload(BaseModel):  
     event: str  
     data: dict  
+
+class Proposal(BaseModel):  
+    title: str  
+    description: str  
+    allocation_amount: str  
+    proposer: str  
 
 @app.exception_handler(RequestValidationError)  
 async def validation_exception_handler(request: Request, exc: RequestValidationError):  
@@ -217,6 +225,45 @@ def get_transactions(limit: int = Query(10, ge=1, le=50)):
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error fetching block {block_num}: {str(e)}")
     return {"transactions": transactions}
+
+@app.post("/proposals", dependencies=[RateLimiter(times=10, seconds=60)])
+def submit_proposal(proposal: Proposal):
+    proposal_id = len(proposals) + 1
+    new_proposal = {
+        "id": proposal_id,
+        "title": proposal.title,
+        "description": proposal.description,
+        "allocation_amount": proposal.allocation_amount,
+        "proposer": proposal.proposer,
+        "votes": {},
+        "status": "active",
+        "created_at": time.time()
+    }
+    proposals.append(new_proposal)
+    return {"message": "Proposal submitted", "id": proposal_id}
+
+@app.get("/proposals", dependencies=[RateLimiter(times=10, seconds=60)])
+def list_proposals():
+    for proposal in proposals:
+        yes = sum(1 for v in proposal["votes"].values() if v == "yes")
+        no = sum(1 for v in proposal["votes"].values() if v == "no")
+        if len(proposal["votes"]) > 5 and yes > no:
+            proposal["status"] = "approved"
+        else:
+            proposal["status"] = "active"
+    return {"proposals": proposals}
+
+@app.post("/proposals/{proposal_id}/vote", dependencies=[RateLimiter(times=10, seconds=60)])
+def vote_on_proposal(proposal_id: int, voter: str = Form(...), vote: str = Form(...)):
+    if vote not in ["yes", "no"]:
+        raise HTTPException(status_code=400, detail="Vote must be yes or no")
+    for proposal in proposals:
+        if proposal["id"] == proposal_id:
+            if proposal["status"] != "active":
+                raise HTTPException(status_code=400, detail="Proposal not active")
+            proposal["votes"][voter] = vote
+            return {"message": "Vote recorded"}
+    raise HTTPException(status_code=404, detail="Proposal not found")
 
 # Run: uvicorn app:app --reload  
 # Test /listen: curl http://127.0.0.1:8000/listen  
