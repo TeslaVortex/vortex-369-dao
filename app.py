@@ -9,6 +9,7 @@ from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter  
 import redis.asyncio as redis  
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.middleware.cors import CORSMiddleware
 security = HTTPBasic()  # For basic auth on /logs
 import os
 import time
@@ -22,6 +23,14 @@ PROPOSAL_CONTRACT_ADDRESS = "0x31Fd16Ab177689D7Fe4022eBe966A0ff5Be86484"
 PROPOSAL_ABI = [{"inputs":[{"internalType":"address","name":"_vortexDAO","type":"address"},{"internalType":"address payable","name":"_treasuryVault","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":False,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":False,"internalType":"address","name":"proposer","type":"address"},{"indexed":False,"internalType":"string","name":"description","type":"string"},{"indexed":False,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":False,"internalType":"address","name":"recipient","type":"address"},{"indexed":False,"internalType":"uint256","name":"score","type":"uint256"}],"name":"ProposalCreated","type":"event"},{"anonymous":False,"inputs":[{"indexed":False,"internalType":"uint256","name":"id","type":"uint256"}],"name":"ProposalExecuted","type":"event"},{"inputs":[{"internalType":"string","name":"desc","type":"string"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"blockNum","type":"uint256"}],"name":"calculateScore","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"id","type":"uint256"}],"name":"executeQueued","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"nextId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"proposals","outputs":[{"internalType":"address","name":"proposer","type":"address"},{"internalType":"string","name":"description","type":"string"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"score","type":"uint256"},{"internalType":"uint256","name":"queuedTime","type":"uint256"},{"internalType":"bool","name":"executed","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"desc","type":"string"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"}],"name":"propose","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"treasuryVault","outputs":[{"internalType":"contract TreasuryVault","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vortexDAO","outputs":[{"internalType":"contract VortexDAO","name":"","type":"address"}],"stateMutability":"view","type":"function"}]
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
@@ -104,6 +113,8 @@ async def startup():
         raise ValueError("DAO_PRIVATE_KEY not set")
     account = w3.eth.account.from_key(private_key)
     proposal_contract = w3.eth.contract(address=PROPOSAL_CONTRACT_ADDRESS, abi=PROPOSAL_ABI)
+    global start_time
+    start_time = time.time()
     # Thematic 4:44 protection portal log
     protection_msg = (
         " 4:44 Protection Portal Activated \n"
@@ -135,21 +146,25 @@ class Proposal(BaseModel):
 
 @app.exception_handler(RequestValidationError)  
 async def validation_exception_handler(request: Request, exc: RequestValidationError):  
-    return JSONResponse(status_code=400, content={"detail": str(exc)})  
+    return JSONResponse(status_code=400, content={"detail": str(exc)})
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "latest_block": latest_block, "uptime": time.time() - start_time}
 
 @app.get("/vortex")  
 def read_vortex():  
-    return {"status": "nominal", "code": 369}  
+    return {"code": 369, "status": "nominal"}  
 
 @app.get("/dao-status")  
 def dao_status():  
-    return {"members": 144, "abundance": "infinite"}  
+    return {"members": 144, "active_members": 144, "abundance": "infinite", "abundance_flow": "active", "phase": "369", "governance_phase": "resonance", "resonance_level": 369}  
 
 @app.get("/listen")
 def listen():
     w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER_URL))
     if w3.is_connected():
-        return {"status": "connected", "block": w3.eth.block_number}
+        return {"connected": True, "block_number": w3.eth.block_number, "status": "ok"}
     else:
         raise HTTPException(status_code=500, detail="Blockchain connection failed")
 
@@ -171,7 +186,7 @@ async def webhook(payload: Payload, x_signature: str = Header(None)):
                 logging.info("Abundance ripple activated for %s with score %d", payload.data, score)
                 app_logs.append(f"Abundance ripple activated for {payload.data} with score {score}")
                 app_logs[:] = app_logs[-100:]  
-        return {"status": "received"}  
+        return {"status": "received", "dao_score": score, "message": "Processed", "success": True}  
     except Exception as e:  
         logging.error("Error processing webhook: %s", str(e))
         app_logs.append(f"Error processing webhook: {str(e)}")
@@ -180,11 +195,11 @@ async def webhook(payload: Payload, x_signature: str = Header(None)):
 
 @app.get("/quantum-status")
 def quantum_status():
-    return {"status": "listening", "latest_block": latest_block}
+    return {"status": "listening", "latest_block": latest_block, "block_number": latest_block, "message": "Quantum node active"}
 
 @app.get("/retrieve")
 def retrieve():
-    return {"scored_events": scored_events}
+    return scored_events
 
 
 @app.get("/logs")
@@ -203,7 +218,7 @@ def get_balance():
         raise HTTPException(status_code=500, detail="Blockchain connection failed")
     balance_wei = w3.eth.get_balance(DAO_TREASURY_ADDRESS)
     balance_eth = w3.from_wei(balance_wei, 'ether')
-    result = {"address": DAO_TREASURY_ADDRESS, "balance_wei": balance_wei, "balance_eth": str(balance_eth)}
+    result = {"balance": str(balance_eth), "formatted": str(balance_eth), "wei": str(balance_wei)}
     cached_balance["value"] = result
     cached_balance["timestamp"] = now
     return result
@@ -234,10 +249,10 @@ def get_transactions(limit: int = Query(10, ge=1, le=50)):
                     }
                     transactions.append(tx_data)
                     if len(transactions) >= limit:
-                        return {"transactions": transactions}
+                        return {"transactions": transactions, "count": len(transactions)}
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error fetching block {block_num}: {str(e)}")
-    return {"transactions": transactions}
+    return {"transactions": transactions, "count": len(transactions)}
 
 @app.post("/proposals", dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 def submit_proposal(proposal: Proposal):
@@ -251,7 +266,7 @@ def submit_proposal(proposal: Proposal):
         })
         signed_tx = w3.eth.account.sign_transaction(tx, private_key)
         tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-        return {"message": "Proposal submitted", "tx_hash": tx_hash.hex()}
+        return {"success": True, "message": "Proposal submitted", "tx_hash": tx_hash.hex()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -272,7 +287,7 @@ def list_proposals():
                 "queuedTime": prop[5],
                 "executed": prop[6]
             })
-        return {"proposals": proposals}
+        return {"proposals": proposals, "count": len(proposals)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -288,7 +303,7 @@ def execute_proposal(proposal_id: int):
         })
         signed_tx = w3.eth.account.sign_transaction(tx, private_key)
         tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-        return {"message": "Execution attempted", "tx_hash": tx_hash.hex()}
+        return {"success": True, "message": "Execution attempted", "tx_hash": tx_hash.hex()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
