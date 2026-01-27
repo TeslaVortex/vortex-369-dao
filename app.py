@@ -177,6 +177,7 @@ async def webhook(payload: Payload, x_signature: str = Header(None)):
         logging.info(f"Payload received: {payload}")
         app_logs.append(f"Payload received: {payload}")
         app_logs[:] = app_logs[-100:]  
+        score = 0
         if payload.event == "transfer":  
             logging.info("Processing transfer: %s", payload.data)
             app_logs.append(f"Processing transfer: {payload.data}")
