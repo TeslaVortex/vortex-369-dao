@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from web3 import Web3  
 import logging  
 import asyncio
-from fastapi_limiter import FastAPILimiter  
+from fastapi_limiter import FastAPILimiter, Limiter  
 import redis.asyncio as redis  
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 security = HTTPBasic()  # For basic auth on /logs
