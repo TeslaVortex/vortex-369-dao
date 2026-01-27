@@ -18,6 +18,9 @@ SECRET_KEY = "vortex369"
 WEB3_PROVIDER = os.environ.get("WEB3_PROVIDER", "https://base-mainnet.infura.io/v3/25cfe12a7a834a6caaa51c4dc06b7bb4")
 DAO_TREASURY_ADDRESS = os.environ.get("DAO_TREASURY_ADDRESS", "0xd8cEab88126a024A0c65449a9AF7621C258161fD")
 
+PROPOSAL_CONTRACT_ADDRESS = "0x31Fd16Ab177689D7Fe4022eBe966A0ff5Be86484"
+PROPOSAL_ABI = [{"inputs":[{"internalType":"address","name":"_vortexDAO","type":"address"},{"internalType":"address payable","name":"_treasuryVault","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"address","name":"proposer","type":"address"},{"indexed":false,"internalType":"string","name":"description","type":"string"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"address","name":"recipient","type":"address"},{"indexed":false,"internalType":"uint256","name":"score","type":"uint256"}],"name":"ProposalCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"}],"name":"ProposalExecuted","type":"event"},{"inputs":[{"internalType":"string","name":"desc","type":"string"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"blockNum","type":"uint256"}],"name":"calculateScore","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"id","type":"uint256"}],"name":"executeQueued","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"nextId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"proposals","outputs":[{"internalType":"address","name":"proposer","type":"address"},{"internalType":"string","name":"description","type":"string"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"score","type":"uint256"},{"internalType":"uint256","name":"queuedTime","type":"uint256"},{"internalType":"bool","name":"executed","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"desc","type":"string"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"}],"name":"propose","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"treasuryVault","outputs":[{"internalType":"contract TreasuryVault","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vortexDAO","outputs":[{"internalType":"contract VortexDAO","name":"","type":"address"}],"stateMutability":"view","type":"function"}]
+
 app = FastAPI()
 
 @app.get("/")
@@ -35,10 +38,12 @@ app_logs = []
 
 redis_connection = None
 
+w3 = None
+account = None
+proposal_contract = None
+
 cached_balance = {"value": None, "timestamp": 0}
 CACHE_TTL = 30
-
-proposals = []
 
 def resonance_score(tx):
     score = 0
@@ -87,10 +92,18 @@ async def event_listener():
 
 @app.on_event("startup")
 async def startup():
-    global redis_connection
+    global redis_connection, w3, account, proposal_contract, private_key
     redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379")  # Fallback for local dev
     redis_connection = redis.from_url(redis_url, encoding="utf-8", decode_responses=True)
     await FastAPILimiter.init(redis_connection)
+    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))
+    if not w3.is_connected():
+        raise ValueError("Web3 not connected")
+    private_key = os.getenv('DAO_PRIVATE_KEY')
+    if not private_key:
+        raise ValueError("DAO_PRIVATE_KEY not set")
+    account = w3.eth.account.from_key(private_key)
+    proposal_contract = w3.eth.contract(address=PROPOSAL_CONTRACT_ADDRESS, abi=PROPOSAL_ABI)
     # Thematic 4:44 protection portal log
     protection_msg = (
         " 4:44 Protection Portal Activated \n"
@@ -116,10 +129,9 @@ class Payload(BaseModel):
     data: dict  
 
 class Proposal(BaseModel):  
-    title: str  
     description: str  
-    allocation_amount: str  
-    proposer: str  
+    amount: int  
+    recipient: str  
 
 @app.exception_handler(RequestValidationError)  
 async def validation_exception_handler(request: Request, exc: RequestValidationError):  
@@ -229,42 +241,56 @@ def get_transactions(limit: int = Query(10, ge=1, le=50)):
 
 @app.post("/proposals", dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 def submit_proposal(proposal: Proposal):
-    proposal_id = len(proposals) + 1
-    new_proposal = {
-        "id": proposal_id,
-        "title": proposal.title,
-        "description": proposal.description,
-        "allocation_amount": proposal.allocation_amount,
-        "proposer": proposal.proposer,
-        "votes": {},
-        "status": "active",
-        "created_at": time.time()
-    }
-    proposals.append(new_proposal)
-    return {"message": "Proposal submitted", "id": proposal_id}
+    try:
+        nonce = w3.eth.get_transaction_count(account.address)
+        tx = proposal_contract.functions.propose(proposal.description, proposal.amount, proposal.recipient).build_transaction({
+            'chainId': 8453,
+            'gas': 200000,
+            'gasPrice': w3.eth.gas_price,
+            'nonce': nonce,
+        })
+        signed_tx = w3.eth.account.sign_transaction(tx, private_key)
+        tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        return {"message": "Proposal submitted", "tx_hash": tx_hash.hex()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/proposals", dependencies=[Depends(RateLimiter(times=10, seconds=60)])
+@app.get("/proposals", dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 def list_proposals():
-    for proposal in proposals:
-        yes = sum(1 for v in proposal["votes"].values() if v == "yes")
-        no = sum(1 for v in proposal["votes"].values() if v == "no")
-        if len(proposal["votes"]) > 5 and yes > no:
-            proposal["status"] = "approved"
-        else:
-            proposal["status"] = "active"
-    return {"proposals": proposals}
+    try:
+        next_id = proposal_contract.functions.nextId().call()
+        proposals = []
+        for i in range(next_id):
+            prop = proposal_contract.functions.proposals(i).call()
+            proposals.append({
+                "id": i,
+                "proposer": prop[0],
+                "description": prop[1],
+                "amount": prop[2],
+                "recipient": prop[3],
+                "score": prop[4],
+                "queuedTime": prop[5],
+                "executed": prop[6]
+            })
+        return {"proposals": proposals}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/proposals/{proposal_id}/vote", dependencies=[Depends(RateLimiter(times=10, seconds=60))])
-def vote_on_proposal(proposal_id: int, voter: str = Form(...), vote: str = Form(...)):
-    if vote not in ["yes", "no"]:
-        raise HTTPException(status_code=400, detail="Vote must be yes or no")
-    for proposal in proposals:
-        if proposal["id"] == proposal_id:
-            if proposal["status"] != "active":
-                raise HTTPException(status_code=400, detail="Proposal not active")
-            proposal["votes"][voter] = vote
-            return {"message": "Vote recorded"}
-    raise HTTPException(status_code=404, detail="Proposal not found")
+@app.post("/proposals/{proposal_id}/execute", dependencies=[Depends(RateLimiter(times=10, seconds=60))])
+def execute_proposal(proposal_id: int):
+    try:
+        nonce = w3.eth.get_transaction_count(account.address)
+        tx = proposal_contract.functions.executeQueued(proposal_id).build_transaction({
+            'chainId': 8453,
+            'gas': 200000,
+            'gasPrice': w3.eth.gas_price,
+            'nonce': nonce,
+        })
+        signed_tx = w3.eth.account.sign_transaction(tx, private_key)
+        tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        return {"message": "Execution attempted", "tx_hash": tx_hash.hex()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Run: uvicorn app:app --reload  
 # Test /listen: curl http://127.0.0.1:8000/listen  
