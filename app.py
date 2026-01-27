@@ -141,7 +141,7 @@ def listen():
     else:
         raise HTTPException(status_code=500, detail="Blockchain connection failed")
 
-@app.post("/webhook")  # Remove dependencies=[RateLimiter(...)] line or comment it  
+@app.post("/webhook")  # Remove dependencies=[Depends(RateLimiter(...)] line or comment it  
 async def webhook(payload: Payload, x_signature: str = Header(None)):  
     # global redis_connection
     try:  
@@ -243,7 +243,7 @@ def submit_proposal(proposal: Proposal):
     proposals.append(new_proposal)
     return {"message": "Proposal submitted", "id": proposal_id}
 
-@app.get("/proposals", dependencies=[RateLimiter(times=10, seconds=60)])
+@app.get("/proposals", dependencies=[Depends(RateLimiter(times=10, seconds=60)])
 def list_proposals():
     for proposal in proposals:
         yes = sum(1 for v in proposal["votes"].values() if v == "yes")
