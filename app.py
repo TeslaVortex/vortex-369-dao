@@ -1,18 +1,22 @@
-from fastapi import FastAPI, HTTPException, Header, Request, Depends  
+from fastapi import FastAPI, HTTPException, Header, Request, Depends, Query  
 from fastapi.responses import JSONResponse  
 from fastapi.exceptions import RequestValidationError  
 from pydantic import BaseModel  
 from web3 import Web3  
 import logging  
 import asyncio
-# from fastapi_limiter import FastAPILimiter, Limiter  # Commented – 'Limiter' not in current version
-# from fastapi_limiter.depends import RateLimiter  # Commented – bypass for now  
+from fastapi_limiter import FastAPILimiter, Limiter
+from fastapi_limiter.depends import RateLimiter  
 import redis.asyncio as redis  
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 security = HTTPBasic()  # For basic auth on /logs
 import os
+import time
 
 SECRET_KEY = "vortex369"
+
+WEB3_PROVIDER = os.environ.get("WEB3_PROVIDER", "https://base-mainnet.infura.io/v3/25cfe12a7a834a6caaa51c4dc06b7bb4")
+DAO_TREASURY_ADDRESS = os.environ.get("DAO_TREASURY_ADDRESS", "0xd8cEab88126a024A0c65449a9AF7621C258161fD")
 
 app = FastAPI()
 
@@ -27,6 +31,11 @@ latest_block = 0
 scored_events = []
 
 app_logs = []
+
+redis_connection = None
+
+cached_balance = {"value": None, "timestamp": 0}
+CACHE_TTL = 30
 
 def resonance_score(tx):
     score = 0
@@ -75,10 +84,10 @@ async def event_listener():
 
 @app.on_event("startup")
 async def startup():
-    # global redis_connection
-    # redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379")  # Fallback for local dev
-    # redis_connection = redis.from_url(redis_url, encoding="utf-8", decode_responses=True)
-    # await FastAPILimiter.init(redis_connection)
+    global redis_connection
+    redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379")  # Fallback for local dev
+    redis_connection = redis.from_url(redis_url, encoding="utf-8", decode_responses=True)
+    await FastAPILimiter.init(redis_connection)
     # Thematic 4:44 protection portal log
     protection_msg = (
         " 4:44 Protection Portal Activated \n"
@@ -162,6 +171,52 @@ def view_logs(credentials: HTTPBasicCredentials = Depends(security)):
     if credentials.username != "vortex" or credentials.password != os.environ.get("LOG_SECRET", "369guard"):  # Set LOG_SECRET in Render env
         raise HTTPException(status_code=401, detail="Unauthorized")
     return {"logs": app_logs}
+
+@app.get("/balance", dependencies=[RateLimiter(times=10, seconds=60)])
+def get_balance():
+    now = time.time()
+    if now - cached_balance["timestamp"] < CACHE_TTL and cached_balance["value"]:
+        return cached_balance["value"]
+    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))
+    if not w3.is_connected():
+        raise HTTPException(status_code=500, detail="Blockchain connection failed")
+    balance_wei = w3.eth.get_balance(DAO_TREASURY_ADDRESS)
+    balance_eth = w3.from_wei(balance_wei, 'ether')
+    result = {"address": DAO_TREASURY_ADDRESS, "balance_wei": balance_wei, "balance_eth": str(balance_eth)}
+    cached_balance["value"] = result
+    cached_balance["timestamp"] = now
+    return result
+
+@app.get("/transactions", dependencies=[RateLimiter(times=10, seconds=60)])
+def get_transactions(limit: int = Query(10, ge=1, le=50)):
+    w3 = Web3(Web3.HTTPProvider(WEB3_PROVIDER))
+    if not w3.is_connected():
+        raise HTTPException(status_code=500, detail="Blockchain connection failed")
+    current_block = w3.eth.block_number
+    transactions = []
+    blocks_to_check = 100  # Check last 100 blocks for transactions
+    for i in range(blocks_to_check):
+        block_num = current_block - i
+        if block_num < 0:
+            break
+        try:
+            block = w3.eth.get_block(block_num, full_transactions=True)
+            for tx in block.transactions:
+                if tx['to'] == DAO_TREASURY_ADDRESS or tx['from'] == DAO_TREASURY_ADDRESS:
+                    tx_data = {
+                        'hash': tx['hash'].hex(),
+                        'from': tx['from'],
+                        'to': tx['to'],
+                        'value': str(tx['value']),
+                        'blockNumber': tx['blockNumber'],
+                        'timestamp': block['timestamp']
+                    }
+                    transactions.append(tx_data)
+                    if len(transactions) >= limit:
+                        return {"transactions": transactions}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error fetching block {block_num}: {str(e)}")
+    return {"transactions": transactions}
 
 # Run: uvicorn app:app --reload  
 # Test /listen: curl http://127.0.0.1:8000/listen  
