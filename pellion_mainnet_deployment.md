@@ -65,6 +65,29 @@ Follow step by step. No rush — only flow.
 
 **Done when:** Contracts live + verified + first shielded action complete  
 
+## Mainnet Deployment Results 🚀
+
+**Contracts Deployed:**
+
+- VortexDAO: 0x801d53677db433A223e1d3fc292E0A3227871A57  
+  [Deployment TX](https://basescan.org/tx/0x94b740e34f8de0b97717efc19d6e34c51ff6f2f6ee59b7ee902eb2f6b0f970f6)
+
+- VortexResolver: 0x6a83a06DD8A36F9cE13Ee47b3f74dCdE1B45Da95  
+  [Deployment TX](https://basescan.org/tx/0x83c26f49e3acbf1fcde0fdf7578906bb4f8c754bbd1dcb617c05b2e1be4e3d0a)
+
+- PellionShield: 0xe80d879D77888bFf9E255950c2cBbE371300E74e  
+  [Deployment TX](https://basescan.org/tx/0x8deb9876badbf6b202f145a14b63e145155dae2b6d218131f4796946f1978d27)
+
+**Configuration Transactions:**
+
+- DAO Resolver Set: [TX](https://basescan.org/tx/0x079cddba0e7a5f9923a57795be165eea503112b61d041d1d0eccdd59e9df7f59)
+
+- Relayer Role Granted: [TX](https://basescan.org/tx/0x07450d3c36bc04b3b0172554b74da6bcf27153b62844da0ec31e46af7ef13b79)
+
+**Gas Cost:** ~0.00000881 ETH
+
+**Status:** Live on Base Mainnet. Sovereignty achieved.
+
 ## Risks & Quick Fixes ⚠️
 - Gas spike? Wait for lower fees  
 - Issue? Roll back to testnet, fix, retry  
