@@ -10,3 +10,4 @@ cache
 *.key
 .DS_Store
 broadcast
+lib
