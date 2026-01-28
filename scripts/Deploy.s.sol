@@ -100,7 +100,7 @@ contract JoinDAO is Script {
         
         vm.startBroadcast(privateKey);
         
-        // Minimum 0.0369 ETH to join
+        // Minimum 0.0369 ETH to join, burning 0.003321 ETH
         dao.joinAsMember{value: 0.0369 ether}();
         
         vm.stopBroadcast();

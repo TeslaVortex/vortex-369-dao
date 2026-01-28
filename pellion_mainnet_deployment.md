@@ -32,9 +32,9 @@ Follow step by step. No rush — only flow.
    cargo test  # If Rust components
    ```
 3. Verify key contracts:  
-   - VortexDAO at 0xA81de...  
-   - VortexResolver at 0x5CC85...  
-   - PellionShield integrations active  
+   - VortexDAO at 0x801d53677db433A223e1d3fc292E0A3227871A57  
+   - VortexResolver at 0x6a83a06DD8A36F9cE13Ee47b3f74dCdE1B45Da95  
+   - PellionShield at 0xe80d879D77888bFf9E255950c2cBbE371300E74e  
 4. Test one final synthetic action + 9% burn to Null Office (ends in 369 🔥)  
 5. Team call:  
    - Share gratitude  
@@ -53,7 +53,7 @@ Follow step by step. No rush — only flow.
 2. Load deployment script (Hardhat/Foundry)  
 3. Execute via multisig:  
    ```bash
-   forge script scripts/DeployPellion.s.sol --rpc-url https://base-mainnet.g.alchemy.com/v2/fyRNkNbxluz2m0tPYmaH5 --broadcast --verify
+   forge script scripts/DeployPellion.s.sol --rpc-url https://base-mainnet.g.alchemy.com/v2/fyRNkNbxluz2m0tPYmaH5 --broadcast
    ```
 4. Key actions:  
    - Deploy/upgrade VortexDAO proxy with PellionShield  
