@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import "forge-std/Script.sol";
 import "../contracts/VortexDAO.sol";
 import "../contracts/VortexResolver.sol";
+import "../contracts/PellionShield.sol";
 
 /**
  * @title DeployVortex
@@ -37,6 +38,9 @@ contract DeployVortex is Script {
             macedonOracle
         );
         
+        // Deploy PellionShield
+        PellionShield shield = new PellionShield();
+        
         // Configure DAO
         dao.setResolver(address(resolver));
         
@@ -50,6 +54,7 @@ contract DeployVortex is Script {
         console.log("=== Vortex-369 DAO Deployed ===");
         console.log("VortexDAO:", address(dao));
         console.log("VortexResolver:", address(resolver));
+        console.log("PellionShield:", address(shield));
         console.log("Generator:", generator);
         console.log("Relayer:", relayer);
         console.log("");

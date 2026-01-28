@@ -13,7 +13,7 @@ use tracing::{info, warn, error, Level};
 use tracing_subscriber::FmtSubscriber;
 
 // Import our modules
-use vortex_369_dao::{
+use vortex_369_core::{
     SyntheticGenerator,
     GovernanceEngine,
     synthetic::EventType,
@@ -22,6 +22,13 @@ use vortex_369_dao::{
     bridge::VortexBridge,
     chain::{ChainClient, ChainConfig},
 };
+
+use rand::Rng;
+
+fn make_robot() -> u32 {
+    let mut rng = rand::thread_rng();
+    rng.gen_range(1..=444) // Quantum fun!
+}
 
 /// 432·3·6·9 Vortex DAO CLI
 #[derive(Parser, Debug)]
@@ -46,7 +53,7 @@ struct Args {
     dry_run: bool,
     
     /// Private key for transactions (optional)
-    #[arg(long, env = "PRIVATE_KEY")]
+    #[arg(long)]
     private_key: Option<String>,
 }
 

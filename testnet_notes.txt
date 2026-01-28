@@ -1,0 +1,31 @@
+Testnet Deployment Notes - Base Sepolia
+
+Deployed Contracts:
+
+- VortexDAO: 0xA81de2AcB8924D07F041739e4e78e2F28f4512f9
+
+- VortexResolver: 0x5CC858Bbf24B6BeB5093A178f44f043947B07c93
+
+- Generator: 0x0000000000000000000000000000000000000000
+
+- Relayer: 0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38
+
+Total Gas Cost: 0.0000058005348 ETH
+
+Block: 36902420
+
+Verified Status:
+
+- Total Yield: 0
+
+- Total Liquidations: 0
+
+- Total Burned: 0
+
+- Current Cycle: 0
+
+Testnet Launch Confirmed! 🎉
+
+Step 4 Completed: Deployed on Base testnet, verified working, cycles starting at 0.
+
+Next: Share on X (@Vortex369X), then mainnet launch.

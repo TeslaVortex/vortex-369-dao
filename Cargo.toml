@@ -20,6 +20,7 @@ serde_json = "1.0"
 
 # Cryptography (for synthetic generation)
 rand_chacha = "0.3"
+rand = "0.8"
 sha3 = "0.10"
 hex = "0.4"
 
@@ -69,3 +70,7 @@ lto = "fat"
 codegen-units = 1
 strip = true
 panic = "abort"
+
+[[bin]]
+name = "vortex"
+path = "src/main_new.rs"

@@ -93,7 +93,7 @@ contract VortexResolver is Ownable {
     // CONSTRUCTOR
     // ═══════════════════════════════════════════════════════════════════════════
     
-    constructor(address _vortexDAO, address _macedonOracle) Ownable(msg.sender) {
+    constructor(address _vortexDAO, address _macedonOracle) Ownable() {
         vortexDAO = _vortexDAO;
         macedonOracle = _macedonOracle;
         authorizedNodes[msg.sender] = true;
