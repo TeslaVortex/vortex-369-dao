@@ -16,6 +16,7 @@ export const CONTRACT_ADDRESSES = {
   VORTEX_DAO: import.meta.env.VITE_VORTEX_DAO_ADDRESS || '',
   VORTEX_RESOLVER: import.meta.env.VITE_VORTEX_RESOLVER_ADDRESS || '',
   PELLION_SHIELD: import.meta.env.VITE_PELLION_SHIELD_ADDRESS || '',
+  NULL_OFFICE: import.meta.env.VITE_NULL_OFFICE_ADDRESS || '',
 };
 
 // Network configuration
