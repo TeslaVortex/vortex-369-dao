@@ -3,10 +3,15 @@ node_modules/
 target/
 lib/
 
-# Environment variables
+# Environment files
 .env
 .env.local
-.env.*.local
+.env.production
+
+# Sensitive data
+*.key
+*.pem
+secrets/
 
 # Logs
 *.log

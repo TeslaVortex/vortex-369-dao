@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+
 /**
  * @title VortexDAO - Simplified
  * @notice 432·3·6·9 Resonance Governance
@@ -9,7 +11,7 @@ pragma solidity ^0.8.19;
  * Zero token. Zero vote. Pure resonance.
  * 9% to DAO. 91% to Null.
  */
-contract VortexDAO {
+contract VortexDAO is Initializable {
     /// @notice The 9 phases of governance
     enum Phase {
         Silence,        // 0
@@ -63,11 +65,11 @@ contract VortexDAO {
     uint256 public totalBurned;
     
     /// @notice Contract owner (for treasury management)
-    address public immutable owner;
+    address public owner;
     
-    /// @notice Constructor sets owner
-    constructor() {
-        owner = msg.sender;
+    /// @notice Initialize the contract
+    function initialize(address _owner) external initializer {
+        owner = _owner;
     }
     
     /// @notice Events

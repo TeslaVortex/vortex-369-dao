@@ -2,26 +2,42 @@
 pragma solidity ^0.8.19;
 
 import "forge-std/Script.sol";
-import "../core/VortexDAO.sol";
+import "../core/VortexDAOSimplified.sol";
 import "../core/NullOffice.sol";
+import "../proxies/VortexDAOProxy.sol";
 
 contract Deploy is Script {
     function run() external {
         vm.startBroadcast();
 
-        // Deploy NullOffice first (doesn't need VortexDAO address yet)
-        NullOffice nullOffice = new NullOffice(address(0)); // Temporary address
+        // Deploy NullOffice implementation
+        NullOffice nullOfficeImpl = new NullOffice(address(0)); // Temporary address
 
-        // Deploy VortexDAO with NullOffice address
-        VortexDAO vortexDao = new VortexDAO(address(nullOffice));
+        // Deploy VortexDAO implementation with NullOffice address
+        VortexDAO vortexDaoImpl = new VortexDAO(address(nullOfficeImpl));
 
-        // Update NullOffice with correct VortexDAO address
-        // Note: In production, NullOffice constructor would take VortexDAO address
-        // For now, we'll assume it's set correctly
+        // Deploy VortexDAO proxy
+        bytes memory vortexDaoInitData = abi.encodeWithSignature("initialize(address)", address(nullOfficeImpl));
+        VortexDAOProxy vortexDaoProxy = new VortexDAOProxy(
+            address(vortexDaoImpl),
+            msg.sender, // admin
+            vortexDaoInitData
+        );
+        VortexDAO vortexDao = VortexDAO(address(vortexDaoProxy));
+
+        // Deploy NullOffice proxy
+        bytes memory nullOfficeInitData = abi.encodeWithSignature("initialize(address)", address(vortexDao));
+        VortexDAOProxy nullOfficeProxy = new VortexDAOProxy(
+            address(nullOfficeImpl),
+            msg.sender, // admin
+            nullOfficeInitData
+        );
 
         vm.stopBroadcast();
 
-        console.log("VortexDAO deployed at:", address(vortexDao));
-        console.log("NullOffice deployed at:", address(nullOffice));
+        console.log("VortexDAO Proxy deployed at:", address(vortexDaoProxy));
+        console.log("VortexDAO Implementation at:", address(vortexDaoImpl));
+        console.log("NullOffice Proxy deployed at:", address(nullOfficeProxy));
+        console.log("NullOffice Implementation at:", address(nullOfficeImpl));
     }
 }

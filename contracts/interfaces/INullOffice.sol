@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-/// @title INullOffice - Interface for NullOffice Burn Contract
+/// @title INullOffice
+/// @notice Interface for the burning contract
 interface INullOffice {
-    event Burned(address indexed from, uint256 amount, uint256 totalBurned);
-
-    function totalBurned() external view returns (uint256);
-    function burnCount() external view returns (uint256);
-    function balance() external view returns (uint256);
-    function is369Pattern(uint256 amount) external pure returns (bool);
-    function digitalRoot(uint256 n) external pure returns (uint256);
+    /// @notice Burn ETH sent to this contract
+    function burn() external payable;
+    
+    /// @notice Get total amount burned
+    /// @return total The total ETH burned
+    function totalBurned() external view returns (uint256 total);
 }

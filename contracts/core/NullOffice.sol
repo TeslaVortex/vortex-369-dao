@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+
 /**
  * @title NullOffice
  * @notice The Null Office - Where 91% of protocol fees are burned
@@ -13,7 +15,7 @@ pragma solidity ^0.8.19;
  * 
  * 3 · 6 · 9
  */
-contract NullOffice {
+contract NullOffice is Initializable {
     /// @notice Total ETH burned to the void
     uint256 public totalBurned;
     
@@ -23,9 +25,12 @@ contract NullOffice {
     /// @notice Emitted when funds are burned
     event Burned(address indexed from, uint256 amount, uint256 totalBurned);
     
+    /// @notice Initialize the contract
+    function initialize() external initializer {
+        // No initialization needed for NullOffice
+    }
+    
     /**
-     * @notice Receive ETH and record the burn
-     */
     receive() external payable {
         totalBurned += msg.value;
         burnCount++;
