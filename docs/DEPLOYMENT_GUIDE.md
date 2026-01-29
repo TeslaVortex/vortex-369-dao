@@ -49,6 +49,17 @@ cd deployment
 ./scripts/monitor-deployment.sh
 ```
 
+## Current Deployed Addresses (Mainnet - Base)
+
+All contracts are deployed and verified on Base mainnet:
+
+- **VortexDAO**: `0x83180ceB8224c8ca84c5717C39B12529cb8cE5b0`
+- **VortexResolver**: `0x6a83a06DD8A36F9cE13Ee47b3f74dCdE1B45Da95`
+- **PellionShield**: `0xe80d879D77888bFf9E255950c2cBbE371300E74e`
+- **TreasuryVault**: `0xd8cEab88126a024A0c65449a9AF7621C258161fD`
+- **Article66Proposal**: `0x31Fd16Ab177689D7Fe4022eBe966A0ff5Be86484`
+- **NullOffice**: `0x7f4Fdd7faC1c684c85DB4B2B141Cae4c818a53Ce`
+
 ## Step-by-Step: Contract Deployment
 
 ### Step 1: Prepare Environment
