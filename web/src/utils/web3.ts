@@ -14,7 +14,8 @@ export interface Web3State {
 // Contract addresses (to be configured from environment)
 export const CONTRACT_ADDRESSES = {
   VORTEX_DAO: import.meta.env.VITE_VORTEX_DAO_ADDRESS || '',
-  NULL_OFFICE: import.meta.env.VITE_NULL_OFFICE_ADDRESS || '',
+  VORTEX_RESOLVER: import.meta.env.VITE_VORTEX_RESOLVER_ADDRESS || '',
+  PELLION_SHIELD: import.meta.env.VITE_PELLION_SHIELD_ADDRESS || '',
 };
 
 // Network configuration

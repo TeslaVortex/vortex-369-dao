@@ -4,9 +4,10 @@ import { ProposalCard } from './ProposalCard';
 
 interface ProposalListProps {
   proposalIds: number[];
+  proposalContents: { [key: number]: { title: string, description: string } };
 }
 
-export const ProposalList: React.FC<ProposalListProps> = ({ proposalIds }) => {
+export const ProposalList: React.FC<ProposalListProps> = React.memo(({ proposalIds, proposalContents }) => {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -135,10 +136,11 @@ export const ProposalList: React.FC<ProposalListProps> = ({ proposalIds }) => {
           <ProposalCard
             key={proposal.id}
             proposal={proposal}
+            content={proposalContents[proposal.id]}
             onVote={handleVoteUpdate}
           />
         ))}
       </div>
     </div>
   );
-};
+});

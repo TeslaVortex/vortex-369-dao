@@ -4,7 +4,7 @@ interface ErrorMessageProps {
   message: string;
 }
 
-export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
+export const ErrorMessage: React.FC<ErrorMessageProps> = React.memo(({ message }) => {
   if (!message) return null;
 
   return (
@@ -19,4 +19,4 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
       ⚠️ {message}
     </div>
   );
-};
+});

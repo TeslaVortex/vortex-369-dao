@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { scoreProposal, ScoreResponse } from '../utils/api';
+import { scoreProposal } from '../utils/api';
+import { ScoreResponse } from '../utils/types';
 
 export const useProposalScoring = () => {
   const [loading, setLoading] = useState(false);

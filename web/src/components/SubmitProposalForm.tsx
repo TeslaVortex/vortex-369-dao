@@ -3,10 +3,10 @@ import { submitProposal } from '../utils/contracts';
 import { useWeb3 } from '../hooks/useWeb3';
 
 interface SubmitProposalFormProps {
-  onProposalSubmitted: () => void;
+  onProposalSubmitted: (proposalId: number, title: string, description: string) => void;
 }
 
-export const SubmitProposalForm: React.FC<SubmitProposalFormProps> = ({ onProposalSubmitted }) => {
+export const SubmitProposalForm: React.FC<SubmitProposalFormProps> = React.memo(({ onProposalSubmitted }) => {
   const { isConnected } = useWeb3();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -41,8 +41,8 @@ export const SubmitProposalForm: React.FC<SubmitProposalFormProps> = ({ onPropos
       setTitle('');
       setDescription('');
 
-      // Notify parent component
-      onProposalSubmitted();
+      // Notify parent component with the proposal ID and content
+      onProposalSubmitted(proposalId, title.trim(), description.trim());
 
       // Clear success message after 5 seconds
       setTimeout(() => setSuccess(''), 5000);
@@ -224,4 +224,4 @@ export const SubmitProposalForm: React.FC<SubmitProposalFormProps> = ({ onPropos
       </form>
     </div>
   );
-};
+});

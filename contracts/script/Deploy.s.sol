@@ -11,10 +11,10 @@ contract Deploy is Script {
         vm.startBroadcast();
 
         // Deploy NullOffice implementation
-        NullOffice nullOfficeImpl = new NullOffice(address(0)); // Temporary address
+        NullOffice nullOfficeImpl = new NullOffice();
 
-        // Deploy VortexDAO implementation with NullOffice address
-        VortexDAO vortexDaoImpl = new VortexDAO(address(nullOfficeImpl));
+        // Deploy VortexDAO implementation
+        VortexDAO vortexDaoImpl = new VortexDAO();
 
         // Deploy VortexDAO proxy
         bytes memory vortexDaoInitData = abi.encodeWithSignature("initialize(address)", address(nullOfficeImpl));
@@ -23,10 +23,10 @@ contract Deploy is Script {
             msg.sender, // admin
             vortexDaoInitData
         );
-        VortexDAO vortexDao = VortexDAO(address(vortexDaoProxy));
+        VortexDAO vortexDao = VortexDAO(payable(address(vortexDaoProxy)));
 
         // Deploy NullOffice proxy
-        bytes memory nullOfficeInitData = abi.encodeWithSignature("initialize(address)", address(vortexDao));
+        bytes memory nullOfficeInitData = abi.encodeWithSignature("initialize()");
         VortexDAOProxy nullOfficeProxy = new VortexDAOProxy(
             address(nullOfficeImpl),
             msg.sender, // admin

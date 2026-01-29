@@ -1,37 +1,46 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 interface ScoreDisplayProps {
   score: number | null;
   explanation: string;
 }
 
-export const ScoreDisplay: React.FC<ScoreDisplayProps> = ({ score, explanation }) => {
-  if (score === null) return null;
+export const ScoreDisplay: React.FC<ScoreDisplayProps> = React.memo(({ score, explanation }) => {
+  const scoreData = useMemo(() => {
+    if (score === null) return null;
 
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return '#28a745'; // High resonance - green
-    if (score >= 60) return '#ffc107'; // Medium resonance - yellow
-    if (score >= 40) return '#fd7e14'; // Low-medium resonance - orange
-    return '#dc3545'; // Low resonance - red
-  };
+    const getScoreColor = (score: number) => {
+      if (score >= 80) return '#28a745'; // High resonance - green
+      if (score >= 60) return '#ffc107'; // Medium resonance - yellow
+      if (score >= 40) return '#fd7e14'; // Low-medium resonance - orange
+      return '#dc3545'; // Low resonance - red
+    };
 
-  const getScoreLabel = (score: number) => {
-    if (score >= 80) return 'High Resonance 🌟';
-    if (score >= 60) return 'Medium Resonance ✨';
-    if (score >= 40) return 'Low-Medium Resonance ⚡';
-    return 'Low Resonance 📉';
-  };
+    const getScoreLabel = (score: number) => {
+      if (score >= 80) return 'High Resonance 🌟';
+      if (score >= 60) return 'Medium Resonance ✨';
+      if (score >= 40) return 'Low-Medium Resonance ⚡';
+      return 'Low Resonance 📉';
+    };
+
+    return {
+      color: getScoreColor(score),
+      label: getScoreLabel(score),
+    };
+  }, [score]);
+
+  if (!scoreData) return null;
 
   return (
     <div style={{
       backgroundColor: '#f8f9fa',
-      border: `2px solid ${getScoreColor(score)}`,
+      border: `2px solid ${scoreData.color}`,
       borderRadius: '12px',
       padding: '20px',
       marginTop: '20px',
     }}>
       <h2 style={{
-        color: getScoreColor(score),
+        color: scoreData.color,
         marginTop: 0,
         fontSize: '24px',
       }}>
@@ -41,10 +50,10 @@ export const ScoreDisplay: React.FC<ScoreDisplayProps> = ({ score, explanation }
       <div style={{
         fontSize: '18px',
         fontWeight: 'bold',
-        color: getScoreColor(score),
+        color: scoreData.color,
         marginBottom: '12px',
       }}>
-        {getScoreLabel(score)}
+        {scoreData.label}
       </div>
 
       <div style={{
@@ -69,4 +78,4 @@ export const ScoreDisplay: React.FC<ScoreDisplayProps> = ({ score, explanation }
       </div>
     </div>
   );
-};
+});

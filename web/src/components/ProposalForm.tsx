@@ -1,29 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 interface ProposalFormProps {
   onSubmit: (text: string) => void;
   loading: boolean;
 }
 
-export const ProposalForm: React.FC<ProposalFormProps> = ({ onSubmit, loading }) => {
+export const ProposalForm: React.FC<ProposalFormProps> = React.memo(({ onSubmit, loading }) => {
   const [text, setText] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(text);
-  };
+  }, [onSubmit, text]);
+
+  const handleTextChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value);
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
       <div style={{ marginBottom: '12px' }}>
         <label htmlFor="proposal" style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-          Enter your DAO proposal:
+          Enter your proposal to score:
         </label>
         <textarea
           id="proposal"
           value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Describe your proposal for the Vortex-369 DAO..."
+          onChange={handleTextChange}
+          placeholder="Describe your proposal..."
           rows={4}
           style={{
             width: '100%',
@@ -33,6 +37,7 @@ export const ProposalForm: React.FC<ProposalFormProps> = ({ onSubmit, loading })
             fontSize: '16px',
             fontFamily: 'inherit',
             resize: 'vertical',
+            boxSizing: 'border-box',
           }}
           disabled={loading}
         />
@@ -53,8 +58,8 @@ export const ProposalForm: React.FC<ProposalFormProps> = ({ onSubmit, loading })
           transition: 'background-color 0.2s',
         }}
       >
-        {loading ? '🌀 Calculating Resonance...' : '🎯 Calculate Resonance Score'}
+        {loading ? ' Calculating...' : ' Calculate Resonance'}
       </button>
     </form>
   );
-};
+});

@@ -32,10 +32,13 @@ contract NullOffice is Initializable {
     
     /**
     receive() external payable {
-        totalBurned += msg.value;
-        burnCount++;
+        uint256 value = msg.value;
+        unchecked {
+            totalBurned += value;
+            burnCount++;
+        }
         
-        emit Burned(msg.sender, msg.value, totalBurned);
+        emit Burned(msg.sender, value, totalBurned);
     }
     
     /**

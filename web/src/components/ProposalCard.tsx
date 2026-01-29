@@ -4,11 +4,12 @@ import { useWeb3 } from '../hooks/useWeb3';
 
 interface ProposalCardProps {
   proposal: Proposal;
+  content?: { title: string; description: string };
   onVote: () => void;
 }
 
-export const ProposalCard: React.FC<ProposalCardProps> = ({ proposal, onVote }) => {
-  const { isConnected, address } = useWeb3();
+export const ProposalCard: React.FC<ProposalCardProps> = React.memo(({ proposal, content, onVote }) => {
+  const { isConnected } = useWeb3();
   const [voting, setVoting] = useState(false);
   const [executing, setExecuting] = useState(false);
   const [error, setError] = useState('');
@@ -122,13 +123,30 @@ export const ProposalCard: React.FC<ProposalCardProps> = ({ proposal, onVote }) 
         marginBottom: '16px',
         border: '1px solid #dee2e6',
       }}>
-        <p style={{
-          margin: '0',
-          lineHeight: '1.5',
-          fontSize: '16px',
-        }}>
-          {proposal.text}
-        </p>
+        {content ? (
+          <>
+            <h4 style={{ margin: '0 0 8px 0', color: '#369' }}>
+              {content.title}
+            </h4>
+            <p style={{
+              margin: '0',
+              lineHeight: '1.5',
+              fontSize: '16px',
+            }}>
+              {content.description}
+            </p>
+          </>
+        ) : (
+          <p style={{
+            margin: '0',
+            lineHeight: '1.5',
+            fontSize: '16px',
+            color: '#666',
+            fontStyle: 'italic',
+          }}>
+            {proposal.text}
+          </p>
+        )}
       </div>
 
       {/* Voting Stats */}
@@ -245,4 +263,4 @@ export const ProposalCard: React.FC<ProposalCardProps> = ({ proposal, onVote }) 
       </div>
     </div>
   );
-};
+});

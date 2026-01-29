@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getTotalBurned } from '../utils/contracts';
 import { useWeb3 } from '../hooks/useWeb3';
 
-export const TreasuryDisplay: React.FC = () => {
+export const TreasuryDisplay: React.FC = React.memo(() => {
   const { isConnected } = useWeb3();
   const [totalBurned, setTotalBurned] = useState<string>('0');
   const [loading, setLoading] = useState(false);
@@ -165,4 +165,4 @@ export const TreasuryDisplay: React.FC = () => {
       </div>
     </div>
   );
-};
+});

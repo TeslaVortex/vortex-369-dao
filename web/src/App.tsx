@@ -11,29 +11,67 @@ import { SubmitProposalForm } from './components/SubmitProposalForm';
 import { ProposalList } from './components/ProposalList';
 
 function App() {
-  const [proposal, setProposal] = useState('');
   const [proposalIds, setProposalIds] = useState<number[]>([]);
+  const [submittedProposals, setSubmittedProposals] = useState<number[]>([]);
+  const [proposalContents, setProposalContents] = useState<{[key: number]: {title: string, description: string}}>({});
   const { score, explanation, loading, error, scoreProposalText } = useProposalScoring();
   const { isConnected, signer } = useWeb3();
+
+  // Load submitted proposals and contents from localStorage on mount
+  useEffect(() => {
+    const storedProposals = localStorage.getItem('vortex-dao-submitted-proposals');
+    const storedContents = localStorage.getItem('vortex-dao-proposal-contents');
+    
+    if (storedProposals) {
+      try {
+        const parsed = JSON.parse(storedProposals);
+        setSubmittedProposals(parsed);
+      } catch (error) {
+        console.warn('Failed to parse stored proposals:', error);
+      }
+    }
+    
+    if (storedContents) {
+      try {
+        const parsed = JSON.parse(storedContents);
+        setProposalContents(parsed);
+      } catch (error) {
+        console.warn('Failed to parse stored contents:', error);
+      }
+    }
+  }, []);
+
+  // Save submitted proposals to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('vortex-dao-submitted-proposals', JSON.stringify(submittedProposals));
+  }, [submittedProposals]);
+
+  // Save proposal contents to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('vortex-dao-proposal-contents', JSON.stringify(proposalContents));
+  }, [proposalContents]);
 
   // Initialize contracts when Web3 is connected
   useEffect(() => {
     if (isConnected && signer) {
       initializeContracts(signer);
-      // In a real app, you'd load existing proposal IDs here
-      // For now, we'll use mock data
-      setProposalIds([1, 2, 3]); // Mock proposal IDs
+      // Start with mock data plus any submitted proposals
+      setProposalIds([1, 2, 3, ...submittedProposals]);
     }
-  }, [isConnected, signer]);
+  }, [isConnected, signer, submittedProposals]);
 
-  const handleSubmit = async () => {
-    await scoreProposalText(proposal);
-  };
-
-  const handleProposalSubmitted = () => {
-    // Refresh proposal list after submission
-    // In a real app, you'd reload proposal IDs from the contract
-    console.log('Proposal submitted, refreshing list...');
+  const handleProposalSubmitted = (proposalId: number, title: string, description: string) => {
+    // Add the new proposal ID to the list
+    setSubmittedProposals(prev => [...prev, proposalId]);
+    setProposalIds(prev => [...prev, proposalId]);
+    
+    // Store the proposal content
+    setProposalContents(prev => ({
+      ...prev,
+      [proposalId]: { title, description }
+    }));
+    
+    console.log('Proposal submitted with ID:', proposalId);
   };
 
   return (
@@ -76,7 +114,7 @@ function App() {
           <>
             <TreasuryDisplay />
             <SubmitProposalForm onProposalSubmitted={handleProposalSubmitted} />
-            <ProposalList proposalIds={proposalIds} />
+            <ProposalList proposalIds={proposalIds} proposalContents={proposalContents} />
 
             {/* Keep the resonance scoring for comparison */}
             <div style={{
@@ -93,7 +131,7 @@ function App() {
               </h2>
 
               <ProposalForm
-                onSubmit={handleSubmit}
+                onSubmit={async (text) => await scoreProposalText(text)}
                 loading={loading}
               />
 
@@ -128,74 +166,3 @@ function App() {
 }
 
 export default App;
-      <p>Enter your proposal to get its resonance score based on 369/432 Hz frequencies.</p>
-
-      <div style={{ marginBottom: '20px' }}>
-        <label htmlFor="proposal" style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-          Proposal Text:
-        </label>
-        <textarea
-          id="proposal"
-          value={proposal}
-          onChange={(e) => setProposal(e.target.value)}
-          placeholder="Enter your proposal here..."
-          style={{
-            width: '100%',
-            height: '150px',
-            padding: '10px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            fontSize: '16px',
-            resize: 'vertical'
-          }}
-        />
-      </div>
-
-      <button
-        onClick={handleScore}
-        disabled={loading}
-        style={{
-          backgroundColor: loading ? '#ccc' : '#007bff',
-          color: 'white',
-          border: 'none',
-          padding: '10px 20px',
-          borderRadius: '4px',
-          cursor: loading ? 'not-allowed' : 'pointer',
-          fontSize: '16px'
-        }}
-      >
-        {loading ? 'Scoring...' : 'Score Proposal'}
-      </button>
-
-      {error && (
-        <div style={{ marginTop: '20px', color: 'red', padding: '10px', border: '1px solid red', borderRadius: '4px' }}>
-          {error}
-        </div>
-      )}
-
-      {score !== null && (
-        <div style={{ marginTop: '20px', padding: '20px', border: '1px solid #28a745', borderRadius: '4px', backgroundColor: '#f8fff9' }}>
-          <h2>Resonance Score: {score}/100</h2>
-          <p><strong>Explanation:</strong> {explanation}</p>
-
-          <div style={{ marginTop: '10px' }}>
-            {score > 66 && <span style={{ color: '#28a745', fontWeight: 'bold' }}>🎉 High resonance! This proposal will auto-execute through 9 phases.</span>}
-            {score >= 33 && score <= 66 && <span style={{ color: '#ffc107', fontWeight: 'bold' }}>🤔 Medium resonance. Community petition option available.</span>}
-            {score < 33 && <span style={{ color: '#dc3545', fontWeight: 'bold' }}>🔥 Low resonance. Proposal will be declined.</span>}
-          </div>
-        </div>
-      )}
-
-      <div style={{ marginTop: '40px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
-        <h3>Tips for High Resonance:</h3>
-        <ul>
-          <li>Use keywords like: vortex, harmony, arcturian, abundance, 369</li>
-          <li>Include 432 Hz or 369 code references</li>
-          <li>Write detailed, meaningful proposals</li>
-        </ul>
-      </div>
-    </div>
-  )
-}
-
-export default App

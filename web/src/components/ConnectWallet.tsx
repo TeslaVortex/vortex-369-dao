@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useWeb3 } from '../hooks/useWeb3';
 
-export const ConnectWallet: React.FC = () => {
+export const ConnectWallet: React.FC = React.memo(() => {
   const {
     address,
     chainId,
@@ -12,19 +12,28 @@ export const ConnectWallet: React.FC = () => {
     disconnectWallet,
   } = useWeb3();
 
-  const formatAddress = (addr: string) => {
-    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
-  };
+  const walletInfo = useMemo(() => {
+    if (!address) return null;
 
-  const getNetworkName = (chainId: number) => {
-    const networks: { [key: number]: string } = {
-      1: 'Ethereum',
-      8453: 'Base',
-      84532: 'Base Sepolia',
-      31337: 'Localhost',
+    const formatAddress = (addr: string) => {
+      return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
     };
-    return networks[chainId] || `Chain ${chainId}`;
-  };
+
+    const getNetworkName = (chainId: number) => {
+      const networks: { [key: number]: string } = {
+        1: 'Ethereum',
+        8453: 'Base',
+        84532: 'Base Sepolia',
+        31337: 'Localhost',
+      };
+      return networks[chainId] || `Chain ${chainId}`;
+    };
+
+    return {
+      formattedAddress: formatAddress(address),
+      networkName: getNetworkName(chainId || 0),
+    };
+  }, [address, chainId]);
 
   if (error && !isConnected) {
     return (
@@ -64,7 +73,7 @@ export const ConnectWallet: React.FC = () => {
       marginBottom: '20px',
       textAlign: 'center',
     }}>
-      {isConnected && address ? (
+      {isConnected && walletInfo ? (
         <div>
           <div style={{
             display: 'flex',
@@ -84,7 +93,7 @@ export const ConnectWallet: React.FC = () => {
               fontWeight: 'bold',
               color: '#369',
             }}>
-              Connected to {getNetworkName(chainId || 0)}
+              Connected to {walletInfo.networkName}
             </span>
           </div>
 
@@ -97,7 +106,7 @@ export const ConnectWallet: React.FC = () => {
             fontFamily: 'monospace',
             fontSize: '16px',
           }}>
-            {formatAddress(address)}
+            {walletInfo.formattedAddress}
           </div>
 
           <button
@@ -155,4 +164,4 @@ export const ConnectWallet: React.FC = () => {
       )}
     </div>
   );
-};
+});
