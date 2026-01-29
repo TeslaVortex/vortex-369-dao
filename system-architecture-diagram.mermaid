@@ -1,0 +1,130 @@
+graph TB
+    subgraph "🌐 User Interface Layer"
+        WEB[Web Application<br/>React/TypeScript]
+        DEMO[Demo App<br/>Resonance Scoring]
+    end
+
+    subgraph "⚙️ Backend Services Layer"
+        API[REST API<br/>Rust/Actix]
+        RESONANCE[Resonance Engine<br/>AI Scoring 0-100]
+        NOTIFY[Notification Service<br/>User Alerts]
+    end
+
+    subgraph "💎 Smart Contract Layer - Base Chain"
+        VORTEX[VortexDAO Contract<br/>0x983a...9fd5<br/>9-Phase Governance]
+        NULL[NullOffice Contract<br/>0x7D2f...2bb8<br/>Burns 91% Fees]
+        PROXY[Proxy Pattern<br/>⚠️ MISSING - Need Upgrade Path]
+    end
+
+    subgraph "🔄 9-Phase Governance Flow"
+        P0[Phase 0: Silence 🌱<br/>3 days]
+        P1[Phase 1: Proposal 📝<br/>3 days]
+        P2[Phase 2: Mirror 🪞<br/>3 days]
+        P3[Phase 3: Vortex 🌀<br/>6 days]
+        P4[Phase 4: Resolution ⚔️<br/>6 days]
+        P5[Phase 5: Fractal 🔄<br/>6 days]
+        P6[Phase 6: Breath 🛑<br/>Checkpoint]
+        P7[Phase 7: Witness 📜<br/>9 days]
+        P8[Phase 8: Return 🔁<br/>9 days]
+        P9[Phase 9: Manifestation ✨<br/>9 days - AUTO-EXECUTE]
+    end
+
+    subgraph "🎯 Scoring Logic"
+        HIGH[Score > 66<br/>✅ Auto-Execute]
+        MID[Score 33-66<br/>🤔 Community Petition]
+        LOW[Score < 33<br/>🔥 Auto-Burn]
+    end
+
+    subgraph "💰 Fee Distribution"
+        FEES[Protocol Fee: 0.9%]
+        DAO_TREASURY[DAO Treasury: 9%<br/>0.081% total]
+        BURN[Null Office: 91%<br/>0.729% total<br/>🔥 BURNED FOREVER]
+    end
+
+    subgraph "🔒 Security & Testing"
+        TESTS[Automated Tests<br/>⚠️ Need Integration Tests]
+        SECURITY[Security Scans<br/>⚠️ Need CI/CD Pipeline]
+        AUDIT[Manual Audits<br/>✅ Completed]
+    end
+
+    subgraph "📦 Storage & Data"
+        BLOCKCHAIN[Base Chain Mainnet<br/>Chain ID: 8453]
+        IPFS[IPFS Storage<br/>⚠️ Not Visible in Repo]
+    end
+
+    %% User Flow
+    WEB --> API
+    DEMO --> API
+    
+    %% API to Services
+    API --> RESONANCE
+    API --> NOTIFY
+    
+    %% Services to Contracts
+    RESONANCE --> VORTEX
+    API --> VORTEX
+    API --> NULL
+    
+    %% Missing Proxy
+    PROXY -.->|Should Wrap| VORTEX
+    PROXY -.->|Should Wrap| NULL
+    
+    %% Governance Flow
+    VORTEX --> P0
+    P0 --> P1
+    P1 --> P2
+    P2 --> P3
+    P3 --> P4
+    P4 --> P5
+    P5 --> P6
+    P6 --> P7
+    P7 --> P8
+    P8 --> P9
+    
+    %% Scoring
+    RESONANCE --> HIGH
+    RESONANCE --> MID
+    RESONANCE --> LOW
+    
+    HIGH --> P9
+    MID --> P6
+    LOW --> NULL
+    
+    %% Fees
+    VORTEX --> FEES
+    FEES --> DAO_TREASURY
+    FEES --> BURN
+    BURN --> NULL
+    
+    %% Security
+    TESTS -.-> VORTEX
+    TESTS -.-> NULL
+    SECURITY -.-> VORTEX
+    SECURITY -.-> NULL
+    AUDIT --> VORTEX
+    AUDIT --> NULL
+    
+    %% Storage
+    VORTEX --> BLOCKCHAIN
+    NULL --> BLOCKCHAIN
+    VORTEX -.->|Could Use| IPFS
+    
+    %% Styling
+    classDef missing fill:#ff6b6b,stroke:#c92a2a,color:#fff
+    classDef active fill:#51cf66,stroke:#2f9e44,color:#fff
+    classDef warning fill:#ffd43b,stroke:#fab005,color:#000
+    
+    class PROXY,TESTS,SECURITY,IPFS missing
+    class VORTEX,NULL,AUDIT,BLOCKCHAIN active
+    class P6,MID warning
+
+    %% Legend
+    subgraph "📊 Legend"
+        LEGEND1[✅ Active & Working]
+        LEGEND2[⚠️ Needs Attention]
+        LEGEND3[❌ Missing/Critical]
+    end
+    
+    class LEGEND1 active
+    class LEGEND2 warning
+    class LEGEND3 missing
