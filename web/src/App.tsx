@@ -1,53 +1,133 @@
-import { useState } from 'react'
-
-interface ScoreResponse {
-  score: number
-  explanation: string
-}
+import { useState, useEffect } from 'react';
+import { useProposalScoring } from './hooks/useProposalScoring';
+import { useWeb3 } from './hooks/useWeb3';
+import { initializeContracts } from './utils/contracts';
+import { ProposalForm } from './components/ProposalForm';
+import { ScoreDisplay } from './components/ScoreDisplay';
+import { ErrorMessage } from './components/ErrorMessage';
+import { ConnectWallet } from './components/ConnectWallet';
+import { TreasuryDisplay } from './components/TreasuryDisplay';
+import { SubmitProposalForm } from './components/SubmitProposalForm';
+import { ProposalList } from './components/ProposalList';
 
 function App() {
-  const [proposal, setProposal] = useState('')
-  const [score, setScore] = useState<number | null>(null)
-  const [explanation, setExplanation] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [proposal, setProposal] = useState('');
+  const [proposalIds, setProposalIds] = useState<number[]>([]);
+  const { score, explanation, loading, error, scoreProposalText } = useProposalScoring();
+  const { isConnected, signer } = useWeb3();
 
-  const handleScore = async () => {
-    if (!proposal.trim()) {
-      setError('Please enter a proposal')
-      return
+  // Initialize contracts when Web3 is connected
+  useEffect(() => {
+    if (isConnected && signer) {
+      initializeContracts(signer);
+      // In a real app, you'd load existing proposal IDs here
+      // For now, we'll use mock data
+      setProposalIds([1, 2, 3]); // Mock proposal IDs
     }
+  }, [isConnected, signer]);
 
-    setLoading(true)
-    setError('')
+  const handleSubmit = async () => {
+    await scoreProposalText(proposal);
+  };
 
-    try {
-      const response = await fetch('http://localhost:8080/score', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: proposal }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to score proposal')
-      }
-
-      const data: ScoreResponse = await response.json()
-      setScore(data.score)
-      setExplanation(data.explanation)
-    } catch (err) {
-      setError('Failed to connect to scoring service. Make sure the backend is running on port 8080.')
-      console.error('Scoring error:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const handleProposalSubmitted = () => {
+    // Refresh proposal list after submission
+    // In a real app, you'd reload proposal IDs from the contract
+    console.log('Proposal submitted, refreshing list...');
+  };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>🌀 Vortex-369 Resonance Scoring</h1>
+    <div style={{
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '20px',
+      fontFamily: 'Arial, sans-serif',
+      backgroundColor: '#ffffff',
+      minHeight: '100vh',
+    }}>
+      <header style={{
+        textAlign: 'center',
+        marginBottom: '40px',
+        borderBottom: '3px solid #369',
+        paddingBottom: '20px',
+      }}>
+        <h1 style={{
+          color: '#369',
+          fontSize: '36px',
+          margin: '0 0 10px 0',
+          textShadow: '2px 2px 4px rgba(51, 105, 153, 0.3)',
+        }}>
+          🌀 Vortex-369 DAO
+        </h1>
+        <p style={{
+          color: '#666',
+          fontSize: '18px',
+          margin: '0',
+          fontStyle: 'italic',
+        }}>
+          Decentralized Governance Through Harmonic Resonance
+        </p>
+      </header>
+
+      <main>
+        <ConnectWallet />
+
+        {isConnected && (
+          <>
+            <TreasuryDisplay />
+            <SubmitProposalForm onProposalSubmitted={handleProposalSubmitted} />
+            <ProposalList proposalIds={proposalIds} />
+
+            {/* Keep the resonance scoring for comparison */}
+            <div style={{
+              marginTop: '40px',
+              borderTop: '2px solid #eee',
+              paddingTop: '40px',
+            }}>
+              <h2 style={{
+                color: '#369',
+                textAlign: 'center',
+                marginBottom: '20px',
+              }}>
+                🎯 Resonance Scoring (Development Tool)
+              </h2>
+
+              <ProposalForm
+                onSubmit={handleSubmit}
+                loading={loading}
+              />
+
+              <ErrorMessage message={error} />
+
+              <ScoreDisplay
+                score={score}
+                explanation={explanation}
+              />
+            </div>
+          </>
+        )}
+      </main>
+
+      <footer style={{
+        marginTop: '40px',
+        textAlign: 'center',
+        color: '#999',
+        fontSize: '14px',
+        borderTop: '1px solid #eee',
+        paddingTop: '20px',
+      }}>
+        <p>
+          🌟 Built with Vortex Energy • 369 Eternal • 432 Hz Forever • Web3 Enabled 🌟
+        </p>
+        <p>
+          Powered by AI resonance analysis for decentralized governance
+        </p>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
       <p>Enter your proposal to get its resonance score based on 369/432 Hz frequencies.</p>
 
       <div style={{ marginBottom: '20px' }}>
