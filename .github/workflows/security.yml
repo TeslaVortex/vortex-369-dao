@@ -1,0 +1,35 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ main, restructure-v2, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Install Slither
+        run: pip3 install slither-analyzer
+
+      - name: Run Slither Security Scan
+        run: |
+          cd contracts
+          slither . --exclude-dependencies --exclude-informational --fail-high
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Run Cargo Audit
+        run: |
+          cd backend
+          cargo install cargo-audit
+          cargo audit

@@ -1,0 +1,26 @@
+name: Deploy Contracts
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Deploy to Base Testnet
+        run: |
+          cd contracts
+          forge script script/Deploy.s.sol --rpc-url $BASE_TESTNET_RPC --private-key $DEPLOYER_KEY --broadcast --verify
+        env:
+          BASE_TESTNET_RPC: ${{ secrets.BASE_TESTNET_RPC }}
+          DEPLOYER_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+
+      - name: Notify on Success
+        if: success()
+        run: echo "Deployment successful"

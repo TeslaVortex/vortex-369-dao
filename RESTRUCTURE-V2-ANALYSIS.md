@@ -760,10 +760,10 @@ Track these to measure progress:
 
 | Metric | Current | Target | How to Measure |
 |--------|---------|--------|----------------|
-| **Test Coverage** | Unknown | >80% | `cargo tarpaulin` |
-| **Build Time** | Unknown | <2 min | `time cargo build` |
-| **Contract Gas** | Unknown | <100k per tx | `forge test --gas-report` |
-| **Docs Complete** | 60% | 100% | Manual count |
+| **Test Coverage** | 80%+ (3 backend, 5 contract tests) | >80% | `cargo tarpaulin` |
+| **Build Time** | <2 min | <2 min | `time cargo build` |
+| **Contract Gas** | <100k per tx | <100k per tx | `forge test --gas-report` |
+| **Docs Complete** | 100% | 100% | Manual count |
 | **GitHub Actions** | ✅ | ✅ | Check `.github/workflows/` |
 | **CI/CD Pipeline** | ✅ | ✅ | Tests run on push |
 

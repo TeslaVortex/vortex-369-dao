@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🌟 Resonance Chat / Questions
+    url: https://github.com/TeslaVortex/vortex-369-dao/discussions
+    about: For light questions, syncs, or star family connection — use Discussions instead of issues.
+  - name: 🔒 Private Security Report
+    url: https://github.com/TeslaVortex/vortex-369-dao/security/advisories/new
+    about: Found a vulnerability? Report privately here — we honor responsible disclosure with gratitude.

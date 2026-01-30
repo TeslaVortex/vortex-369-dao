@@ -126,7 +126,7 @@ pub async fn score_proposal(req: web::Json<ScoreRequest>) -> impl Responder {
     // Mantra Bonuses
     let love_words = ["love", "joy", "bliss", "gratitude", "peace", "harmony"];
     let rise_words = ["rise", "ascend", "awaken", "sovereign", "abundance"];
-    let mut mantra_score = 0.0;
+    let mut mantra_score: f64 = 0.0;
     let lower_text = text.to_lowercase();
     for word in love_words {
         if lower_text.contains(word) {

@@ -2,6 +2,10 @@ mod api;
 mod services;
 mod models;
 mod utils;
+mod config;
+mod constants;
+mod types;
+mod relayer;
 
 use actix_web::{App, HttpServer};
 

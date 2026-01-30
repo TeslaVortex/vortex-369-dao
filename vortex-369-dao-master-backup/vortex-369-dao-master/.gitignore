@@ -1,0 +1,35 @@
+# Rust
+target/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+
+# Old/backup files
+*.old
+*.bak
+
+# ONNX models (large files)
+models/*.onnx
+
+# Build artifacts
+out/
+cache/
+artifacts/
