@@ -17,6 +17,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .service(api::health::health_check)
+            .service(api::score::score_proposal)
             // Add more routes here
     })
     .bind(("0.0.0.0", port))?
