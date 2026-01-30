@@ -16,6 +16,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
+            .wrap(actix_cors::Cors::default().allow_any_origin().allow_any_method().allow_any_header())
             .service(api::health::health_check)
             .service(api::score::score_proposal)
             // Add more routes here
