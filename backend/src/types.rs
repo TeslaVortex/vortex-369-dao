@@ -104,6 +104,15 @@ pub struct ProcessingResult {
     pub processing_time_ms: u64,
 }
 
+/// Contract addresses
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ContractAddresses {
+    pub vortex_dao: &'static str,
+    pub null_office: &'static str,
+    pub vortex_resolver: &'static str,
+    pub treasury_vault: &'static str,
+}
+
 /// Liquidation parameters
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LiquidationParams {

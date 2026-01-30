@@ -37,18 +37,6 @@ pub const MANIPULATION_EXCLUSION_DAYS: u64 = 81;
 
 /// Contract addresses
 pub mod addresses {
-    /// Null Office burn address
-    pub const NULL_OFFICE: &str = "0xE532557FC3D83B700eF91Fce8d131DbD1918122b";
-
-    /// Resolver (Base)
-    pub const RESOLVER_BASE: &str = "0x2cb17E294ca638cC622a41336e84DDE998F323E2";
-
-    /// Resolver (Arbitrum)
-    pub const RESOLVER_ARBITRUM: &str = "0x369000000000000000000000000000000000432";
-
-    /// Resolver (Ethereum)
-    pub const RESOLVER_ETH: &str = "0x369000000000000000000000000000000000432";
-
     /// Relayer Safe (Gnosis Safe)
     pub const RELAYER_SAFE: &str = "0x432000000000000000000000000000000000369";
 }

@@ -103,3 +103,6 @@ target/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# Backup folder
+vortex-369-dao-master-backup/
