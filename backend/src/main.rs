@@ -9,14 +9,17 @@ use actix_web::{App, HttpServer};
 async fn main() -> std::io::Result<()> {
     env_logger::init();
 
-    println!("🌀 Vortex-369 DAO Backend starting...");
+    let port = std::env::var("PORT").unwrap_or("8080".to_string());
+    let port: u16 = port.parse().unwrap();
+
+    println!("🌀 Vortex-369 DAO Backend starting on port {}...", port);
 
     HttpServer::new(|| {
         App::new()
             .service(api::health::health_check)
             // Add more routes here
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(("0.0.0.0", port))?
     .run()
     .await
 }
