@@ -71,6 +71,9 @@ contract VortexDAOTest is Test {
     }
 
     function testAccessControl() public {
+        // Grant ADMIN_ROLE to test contract
+        dao.grantRole(dao.ADMIN_ROLE(), address(this));
+        
         // Set up timelock for testing
         address[] memory proposers = new address[](1);
         address[] memory executors = new address[](1);
@@ -89,6 +92,7 @@ contract VortexDAOTest is Test {
         vm.prank(address(0x2));
         vm.expectRevert(); // Missing SCORER_ROLE for grantScorerRole
         dao.grantScorerRole(address(0x4));
+        vm.stopPrank();
         
         // Test that admin can call admin functions
         dao.grantScorerRole(address(0x4));
