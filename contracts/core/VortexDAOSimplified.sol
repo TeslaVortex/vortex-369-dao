@@ -433,6 +433,15 @@ contract VortexDAO is Initializable, AccessControlUpgradeable, PausableUpgradeab
     }
     
     /**
+     * @notice Grant admin role to an address (only DEFAULT_ADMIN_ROLE)
+     * @param account Address to grant admin role to
+     */
+    function grantAdminRole(address account) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(account != address(0), "Invalid account address");
+        _grantRole(ADMIN_ROLE, account);
+    }
+    
+    /**
      * @notice Revoke admin role from an address (only DEFAULT_ADMIN_ROLE)
      * @param account Address to revoke admin role from
      */
