@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "chainId": "84532",
+  "createdAt": 1735680000000,
+  "meta": {
+    "name": "Grant Scorer Role",
+    "description": "Test role management functionality through Safe"
+  },
+  "transactions": [
+    {
+      "to": "0xda77e5e07B08DE3C4d7c18b849d3F569B2eBE71F",
+      "value": "0",
+      "data": "0x6a6b0c5d000000000000000000000000742d35cc6e1c6c8b4e7c8b6a8c8c8c8c8c8c8c8c"
+    }
+  ]
+}

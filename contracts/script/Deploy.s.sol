@@ -17,7 +17,7 @@ contract Deploy is Script {
         VortexDAO vortexDaoImpl = new VortexDAO();
 
         // Deploy VortexDAO proxy
-        bytes memory vortexDaoInitData = abi.encodeWithSignature("initialize(address)", address(nullOfficeImpl));
+        bytes memory vortexDaoInitData = abi.encodeWithSignature("initialize(address)", msg.sender);
         VortexDAOProxy vortexDaoProxy = new VortexDAOProxy(
             address(vortexDaoImpl),
             msg.sender, // admin

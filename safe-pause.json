@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "chainId": "84532",
+  "createdAt": 1735680000000,
+  "meta": {
+    "name": "Emergency Pause",
+    "description": "Test emergency pause functionality through Safe"
+  },
+  "transactions": [
+    {
+      "to": "0xda77e5e07B08DE3C4d7c18b849d3F569B2eBE71F",
+      "value": "0",
+      "data": "0x8456cb59"
+    }
+  ]
+}
