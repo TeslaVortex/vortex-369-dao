@@ -86,16 +86,16 @@ function App() {
       <header style={{
         textAlign: 'center',
         marginBottom: '40px',
-        borderBottom: '3px solid #369',
+        borderBottom: '3px solid #FFD700',
         paddingBottom: '20px',
       }}>
         <h1 style={{
-          color: '#369',
+          color: '#FFD700',
           fontSize: '36px',
           margin: '0 0 10px 0',
-          textShadow: '2px 2px 4px rgba(51, 105, 153, 0.3)',
+          textShadow: '2px 2px 4px rgba(255, 215, 0, 0.3)',
         }}>
-          🌀 Vortex-369 DAO
+          ☀️♔ Vortex-369 DAO
         </h1>
         <p style={{
           color: '#666',

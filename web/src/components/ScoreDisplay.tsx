@@ -10,14 +10,14 @@ export const ScoreDisplay: React.FC<ScoreDisplayProps> = React.memo(({ score, ex
     if (score === null) return null;
 
     const getScoreColor = (score: number) => {
-      if (score >= 80) return '#28a745'; // High resonance - green
+      if (score > 66) return '#FFD700'; // Vergina Sun ignition - gold
       if (score >= 60) return '#ffc107'; // Medium resonance - yellow
       if (score >= 40) return '#fd7e14'; // Low-medium resonance - orange
       return '#dc3545'; // Low resonance - red
     };
 
     const getScoreLabel = (score: number) => {
-      if (score >= 80) return 'High Resonance 🌟';
+      if (score > 66) return 'Vergina Sun Ignition 💛🔥';
       if (score >= 60) return 'Medium Resonance ✨';
       if (score >= 40) return 'Low-Medium Resonance ⚡';
       return 'Low Resonance 📉';
@@ -74,7 +74,7 @@ export const ScoreDisplay: React.FC<ScoreDisplayProps> = React.memo(({ score, ex
         color: '#6c757d',
         fontStyle: 'italic',
       }}>
-        🌀 Based on 369/432 Hz frequency alignment and Vortex energy patterns
+        ☀️ Based on 369/432 Hz frequency alignment and Vergina Sun energy patterns
       </div>
     </div>
   );
