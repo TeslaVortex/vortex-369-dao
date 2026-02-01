@@ -47,6 +47,33 @@ export const ScoreDisplay: React.FC<ScoreDisplayProps> = React.memo(({ score, ex
         Resonance Score: {score}/100
       </h2>
 
+      {/* 16-Ray Vergina Sun Meter */}
+      <div style={{ textAlign: 'center', margin: '16px 0' }}>
+        <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="60" r="10" fill={score > 66 ? "#FFD700" : "#ccc"} />
+          {Array.from({ length: 16 }, (_, i) => {
+            const angle = (i * 360) / 16;
+            const rad = angle * (Math.PI / 180);
+            const x1 = 60 + 15 * Math.cos(rad);
+            const y1 = 60 + 15 * Math.sin(rad);
+            const x2 = 60 + 35 * Math.cos(rad);
+            const y2 = 60 + 35 * Math.sin(rad);
+            const filled = score > 66 || i < Math.floor(score * 16 / 100);
+            return (
+              <line
+                key={i}
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke={filled ? "#FFD700" : "#ddd"}
+                strokeWidth="3"
+              />
+            );
+          })}
+        </svg>
+      </div>
+
       <div style={{
         fontSize: '18px',
         fontWeight: 'bold',

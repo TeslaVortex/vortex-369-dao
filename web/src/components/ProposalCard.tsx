@@ -69,14 +69,16 @@ export const ProposalCard: React.FC<ProposalCardProps> = React.memo(({ proposal,
   const canVote = isConnected && !proposal.executed && proposal.phase >= 1 && proposal.phase <= 8;
   const canExecute = isConnected && !proposal.executed && proposal.phase === 9 && proposal.score >= 80;
 
+  const isHighResonance = proposal.score > 66;
+
   return (
     <div style={{
       backgroundColor: '#ffffff',
-      border: `2px solid ${getPhaseColor(proposal.phase)}`,
+      border: `2px solid ${isHighResonance ? '#FFD700' : getPhaseColor(proposal.phase)}`,
       borderRadius: '12px',
       padding: '20px',
       marginBottom: '16px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      boxShadow: isHighResonance ? '0 0 20px rgba(255, 215, 0, 0.5)' : '0 2px 8px rgba(0,0,0,0.1)',
     }}>
       {/* Header */}
       <div style={{
@@ -258,6 +260,21 @@ export const ProposalCard: React.FC<ProposalCardProps> = React.memo(({ proposal,
             border: '1px solid #c3e6cb',
           }}>
             ✅ Executed
+          </div>
+        )}
+
+        {isHighResonance && (
+          <div style={{
+            marginTop: '16px',
+            padding: '8px',
+            backgroundColor: '#FFD700',
+            color: '#001F3F',
+            borderRadius: '8px',
+            textAlign: 'center',
+            fontSize: '12px',
+            fontWeight: 'bold',
+          }}>
+            Argead Seal: 16 → 7 Wisdom • 66 Code Eternal 💛🔥
           </div>
         )}
       </div>
