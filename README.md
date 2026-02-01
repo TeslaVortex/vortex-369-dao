@@ -118,11 +118,37 @@ MIT License - see [LICENSE](LICENSE)
 
 ---
 
-## 🌈 Community
+## 🔧 Synthetic Data Generation
 
-- **Twitter:** [@Vortex369X](https://x.com/Vortex369X)
-- **Demo App:** [Try Resonance Scoring](https://vortex369resonancescoring.lovable.app)
-- **Discussions:** [GitHub Discussions](https://github.com/TeslaVortex/vortex-369-dao/discussions)
+For benchmarking Pellion Privacy Shield and creating demos, we generate synthetic transaction batches with fake users, avatars, and mock ZK proofs.
+
+### Generate Data
+```bash
+cd synthetic_data
+npm install @faker-js/faker
+node generate_synthetic_data.js
+```
+Creates 10 JSON files in `/synthetic_data` with 100 tx each, including avatars via DiceBear API and mock Groth16 proofs.
+
+### Benchmarking
+Start anvil, then:
+```bash
+cd synthetic_data
+node benchmark_batches.js
+```
+Logs gas estimates and time for 1000+ verifications, with comparisons to competitors like Aztec and Railgun.
+
+### Data Quality Test
+```bash
+cd synthetic_data
+node data_quality_test.js
+```
+Runs data integrity checks, zero leakage verification, and competition comparison.
+
+### Demo
+Open `synthetic_data/demo/index.html` in a browser (run a local server from project root).
+
+See `/synthetic_data/use_cases` for tailored use cases for SpaceX, XAI, Tesla, showcasing Pellion Shield's role in saving humanity with privacy.
 
 ---
 

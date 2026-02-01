@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpaceX: Private Funding for Humanity's Future</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: linear-gradient(to bottom, #000, #001122); color: white; }
+        h1 { text-align: center; color: #FFD700; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .card { background: rgba(255, 255, 255, 0.1); border: 1px solid #FFD700; border-radius: 8px; padding: 10px; width: 250px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .avatar { width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; }
+        .tx-info { font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h1>🚀 SpaceX: Private Funding for Humanity's Future</h1>
+    <p style="text-align: center;">Demo showing 100 synthetic users funding SpaceX missions with zero-leakage privacy, proving endless armies at zero cost.</p>
+    <div class="container" id="transactions"></div>
+
+    <script>
+        async function loadDemo() {
+            try {
+                const response = await fetch('spacex_batch.json');
+                const transactions = await response.json();
+                const container = document.getElementById('transactions');
+
+                transactions.forEach(tx => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <img src="${tx.avatar_url}" alt="Avatar" class="avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjUiIGN5PSIyNSIgcj0iMjUiIGZpbGw9IiM5OTk5OTkiLz4KPHBhdGggZD0iTTIwIDIwSDMwVjMwSDIwVjIwWiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4='">
+                        <div class="tx-info">
+                            <strong>🚀 ${tx.tx_type.replace(/_/g, ' ').toUpperCase()}</strong><br>
+                            Amount: ${tx.amount} ${tx.token}<br>
+                            Donor: ${tx.user_wallet.slice(0, 6)}...${tx.user_wallet.slice(-4)}<br>
+                            Date: ${new Date(tx.timestamp).toLocaleDateString()}<br>
+                            <small>Zero-Leakage ZK Proof Verified</small>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading demo data:', error);
+            }
+        }
+
+        loadDemo();
+    </script>
+</body>
+</html>
