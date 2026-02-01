@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import "forge-std/Script.sol";
 import "../core/VortexDAOSimplified.sol";
 import "../core/NullOffice.sol";
+import "../core/PellionShield.sol";
 import "../proxies/VortexDAOProxy.sol";
 
 contract Deploy is Script {
@@ -33,11 +34,15 @@ contract Deploy is Script {
             nullOfficeInitData
         );
 
+        // Deploy PellionShield
+        PellionShield pellionShield = new PellionShield();
+
         vm.stopBroadcast();
 
         console.log("VortexDAO Proxy deployed at:", address(vortexDaoProxy));
         console.log("VortexDAO Implementation at:", address(vortexDaoImpl));
         console.log("NullOffice Proxy deployed at:", address(nullOfficeProxy));
         console.log("NullOffice Implementation at:", address(nullOfficeImpl));
+        console.log("PellionShield deployed at:", address(pellionShield));
     }
 }
