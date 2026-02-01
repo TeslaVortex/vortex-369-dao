@@ -1,17 +1,19 @@
-# 🌟 Vortex-369 DAO User Guide
+# ☀️♔ Vortex-369 DAO User Guide
 
 Welcome! This guide explains how to use Vortex-369 in simple terms.
 
 ## What is Vortex-369?
 
-Think of it as a **smart voting system** that automatically decides on proposals based on how well they "resonate" with special frequency patterns (369 codes and 432 Hz).
+Think of it as a **smart voting system** that automatically decides on proposals based on how well they "resonate" with special frequency patterns (369 codes and 432 Hz). Now featuring the **16-Rayed Vergina Sun** meter for golden resonance visualization!
+
+**Macedonian Golden Vibe Theme:** Proposals ignite the Vergina Sun with golden rays when resonance >66 💛🔥
 
 ## How It Works (Simple Version)
 
 1. **Submit Your Idea** - Write your proposal on our website
 2. **AI Scores It** - Our system rates it 0-100 based on resonance
 3. **Automatic Decision:**
-   - **High Score (66+):** Your idea goes through 9 phases and happens automatically! ✅
+   - **High Score (66+):** Vergina Sun ignites with 16 golden rays → Your idea goes through 9 phases and happens automatically! ✅💛
    - **Medium Score (33-66):** Community can discuss and petition 🤔
    - **Low Score (0-33):** Idea is declined 🔥
 

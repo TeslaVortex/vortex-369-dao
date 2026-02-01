@@ -1,0 +1,39 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Center circle -->
+  <circle cx="100" cy="100" r="20" fill="#FFD700" stroke="#FFD700" stroke-width="2"/>
+  
+  <!-- 16 Rays -->
+  <!-- Ray 0 -->
+  <line x1="100" y1="100" x2="100" y2="30" stroke="#FFD700" stroke-width="4"/>
+  <!-- Ray 1 -->
+  <line x1="100" y1="100" x2="135" y2="35" stroke="#FFD700" stroke-width="4"/>
+  <!-- Ray 2 -->
+  <line x1="100" y1="100" x2="165" y2="65" stroke="#FFD700" stroke-width="4"/>
+  <!-- Ray 3 -->
+  <line x1="100" y1="100" x2="170" y2="100" stroke="#FFD700" stroke-width="4"/>
+  <!-- Ray 4 -->
+  <line x1="100" y1="100" x2="165" y2="135" stroke="#FFD700" stroke-width="4"/>
+  <!-- Ray 5 -->
+  <line x1="100" y1="100" x2="135" y2="165" stroke="#FFD700" stroke-width="4"/>
+  <!-- Ray 6 -->
+  <line x1="100" y1="100" x2="100" y2="170" stroke="#FFD700" stroke-width="4"/>
+  <!-- Ray 7 -->
+  <line x1="100" y1="100" x2="65" y2="165" stroke="#FFD700" stroke-width="4"/>
+  <!-- Ray 8 -->
+  <line x1="100" y1="100" x2="35" y2="135" stroke="#FFD700" stroke-width="4"/>
+  <!-- Ray 9 -->
+  <line x1="100" y1="100" x2="30" y2="100" stroke="#FFD700" stroke-width="4"/>
+  <!-- Ray 10 -->
+  <line x1="100" y1="100" x2="35" y2="65" stroke="#FFD700" stroke-width="4"/>
+  <!-- Ray 11 -->
+  <line x1="100" y1="100" x2="65" y2="35" stroke="#FFD700" stroke-width="4"/>
+  <!-- Additional rays for 16 -->
+  <line x1="100" y1="100" x2="120" y2="40" stroke="#FFD700" stroke-width="4"/>
+  <line x1="100" y1="100" x2="160" y2="80" stroke="#FFD700" stroke-width="4"/>
+  <line x1="100" y1="100" x2="160" y2="120" stroke="#FFD700" stroke-width="4"/>
+  <line x1="100" y1="100" x2="120" y2="160" stroke="#FFD700" stroke-width="4"/>
+  <line x1="100" y1="100" x2="80" y2="160" stroke="#FFD700" stroke-width="4"/>
+  <line x1="100" y1="100" x2="40" y2="120" stroke="#FFD700" stroke-width="4"/>
+  <line x1="100" y1="100" x2="40" y2="80" stroke="#FFD700" stroke-width="4"/>
+  <line x1="100" y1="100" x2="80" y2="40" stroke="#FFD700" stroke-width="4"/>
+</svg>

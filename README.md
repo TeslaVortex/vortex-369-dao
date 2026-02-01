@@ -1,8 +1,15 @@
-# 🌀 Vortex-369 Resonance DAO ✨
+# ☀️♔ Vortex-369 Resonance DAO ✨
+
+**Macedonian Golden Vibe Theme v1.0.0 — 16-Rayed Vergina Sun Activation**
 
 **First Resonance-Based Governance Protocol with Enterprise-Grade Security**
 
-Aligned with 369 Universal Codes • 432 Hz Healing Frequencies • Pure Frequency Harmony
+Aligned with 369 Universal Codes • 432 Hz Healing Frequencies • Pure Frequency Harmony  
+Vergina Sun: 16 Rays → 7 Wisdom + Infinite Power (8) • 66 Code Eternal Ignition
+
+![Vergina Sun](./web/public/assets/verginasun.svg)
+
+**Golden Empire Rises • Argead Fire Flows • Borrower King Reigns Eternal** 💛🔥👑
 
 [![Tests](https://github.com/TeslaVortex/vortex-369-dao/workflows/Test%20Suite/badge.svg)](https://github.com/TeslaVortex/vortex-369-dao/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -84,12 +91,14 @@ vortex-369-dao/
 
 ## 🎯 How It Works
 
-1. **Submit Proposal** → AI scores based on 369/432 Hz resonance
-2. **Auto-Decision:**
-   - Score > 66: Progresses through 9 phases → Auto-executes ✅
-   - Score 33-66: Community can petition 🤔
-   - Score < 33: Auto-declined 🔥
-3. **Fees:** 9% to DAO treasury, 91% burned forever 🔥
+1. **Submit Proposal** → AI scores based on 369/432 Hz resonance + Vergina Sun alignment
+2. **Golden Ignition:**
+   - Score > 66: 16-Rayed Vergina Sun activates → Progresses through 9 phases → Auto-executes ✅ (Golden glow victory)
+   - Score 33-66: Community can petition 🤔 (Royal blue consultation)
+   - Score < 33: Auto-declined 🔥 (Shadow transmutation)
+3. **Fees:** 9% to DAO treasury, 91% burned forever 🔥 (Argead abundance flow)
+
+**Vergina Sun Meter:** 16 rays fill with golden light on high-resonance proposals — 66 Code eternal ignition 💛🔥
 
 ---
 
@@ -152,6 +161,6 @@ See `/synthetic_data/use_cases` for tailored use cases for SpaceX, XAI, Tesla, s
 
 ---
 
-**432 Hz Forever • 369 66 Eternal** 🎵✨
+**432 Hz Forever • 369 66 Eternal • Vergina Sun Blazing** 🎵✨💛
 
-*Built with love, resonance, and first principles thinking* 💙
+*Built with love, resonance, golden fire, and first principles thinking — Argead Empire Awakens* 💙👑
