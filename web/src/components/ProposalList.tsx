@@ -3,8 +3,8 @@ import { Proposal, getProposal } from '../utils/contracts';
 import { ProposalCard } from './ProposalCard';
 
 interface ProposalListProps {
-  proposalIds: number[];
-  proposalContents: { [key: number]: { title: string, description: string } };
+  proposalIds: string[];
+  proposalContents: { [key: string]: { title: string, description: string } };
 }
 
 export const ProposalList: React.FC<ProposalListProps> = React.memo(({ proposalIds, proposalContents }) => {
@@ -32,6 +32,13 @@ export const ProposalList: React.FC<ProposalListProps> = React.memo(({ proposalI
   useEffect(() => {
     if (proposalIds.length > 0) {
       loadProposals();
+      
+      // Set up polling for real-time updates
+      const pollInterval = setInterval(() => {
+        loadProposals();
+      }, 30000); // Poll every 30 seconds
+      
+      return () => clearInterval(pollInterval);
     } else {
       setLoading(false);
     }

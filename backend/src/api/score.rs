@@ -1,10 +1,17 @@
 use actix_web::{post, web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use ethers::{
+    prelude::*,
+    types::Bytes,
+    utils::hex,
+};
+use std::str::FromStr;
+use crate::config::VortexConfig;
 
 #[derive(Deserialize)]
 struct ScoreRequest {
     text: String,
+    proposal_id: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -55,7 +62,10 @@ fn get_keywords() -> HashMap<&'static str, f64> {
 }
 
 #[post("/score")]
-pub async fn score_proposal(req: web::Json<ScoreRequest>) -> impl Responder {
+pub async fn score_proposal(
+    req: web::Json<ScoreRequest>,
+    config: web::Data<VortexConfig>,
+) -> impl Responder {
     let text = &req.text;
     let mut score = 0.0;
     let mut explanation = Vec::new();
@@ -147,8 +157,63 @@ pub async fn score_proposal(req: web::Json<ScoreRequest>) -> impl Responder {
     // Cap at 369
     score = score.min(369.0);
 
+    // Submit to oracle if enabled and proposal_id provided
+    if config.oracle.enabled && req.proposal_id.is_some() {
+        if let Some(private_key) = &config.oracle.private_key {
+            match submit_to_oracle(&config, private_key, req.proposal_id.clone().unwrap(), U256::from(score as u64)).await {
+                Ok(_) => explanation.push("Oracle data submitted successfully".to_string()),
+                Err(e) => explanation.push(format!("Oracle submission failed: {}", e)),
+            }
+        }
+    }
+
     HttpResponse::Ok().json(ScoreResponse {
         score,
         explanation: explanation.join("; "),
     })
+}
+
+async fn submit_to_oracle(
+    config: &VortexConfig,
+    private_key: &str,
+    action_id: String,
+    resonance: U256,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let provider = Provider::<Http>::connect(&config.chain.rpc_url).await;
+    let wallet = private_key.parse::<LocalWallet>()?.with_chain_id(config.chain.chain_id);
+    let client = SignerMiddleware::new(provider, wallet);
+
+    let contract_address: Address = config.contracts.vortex_dao.parse()?;
+    
+    // Function selector for submitOracleData(uint256,uint96)
+    let selector = hex::decode("8b5c4f7d")?;
+    
+    // Parse action_id as U256 (assuming it's hex string)
+    let action_id_u256 = if action_id.starts_with("0x") {
+        U256::from_str(&action_id)?
+    } else {
+        U256::from_dec_str(&action_id)?
+    };
+    
+    // Encode parameters: actionId (uint256), resonance (uint96)
+    let mut action_id_bytes = [0u8;32];
+    action_id_u256.to_big_endian(&mut action_id_bytes);
+    
+    let mut res_bytes = [0u8;32];
+    resonance.to_big_endian(&mut res_bytes);
+    let resonance_bytes = res_bytes.to_vec(); // full 32 bytes for uint96 parameter
+    
+    let mut data = selector;
+    data.extend_from_slice(&action_id_bytes);
+    data.extend_from_slice(&resonance_bytes);
+
+    let tx = TransactionRequest::new()
+        .to(contract_address)
+        .data(Bytes::from(data))
+        .gas(200000);
+
+    let pending_tx = client.send_transaction(tx, None).await?;
+    let _receipt = pending_tx.await?;
+    
+    Ok(())
 }

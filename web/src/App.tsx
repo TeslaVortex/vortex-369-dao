@@ -9,11 +9,12 @@ import { ConnectWallet } from './components/ConnectWallet';
 import { TreasuryDisplay } from './components/TreasuryDisplay';
 import { SubmitProposalForm } from './components/SubmitProposalForm';
 import { ProposalList } from './components/ProposalList';
+import { RoleManagement } from './components/RoleManagement';
 
 function App() {
-  const [proposalIds, setProposalIds] = useState<number[]>([]);
-  const [submittedProposals, setSubmittedProposals] = useState<number[]>([]);
-  const [proposalContents, setProposalContents] = useState<{[key: number]: {title: string, description: string}}>({});
+  const [proposalIds, setProposalIds] = useState<string[]>([]);
+  const [submittedProposals, setSubmittedProposals] = useState<string[]>([]);
+  const [proposalContents, setProposalContents] = useState<{[key: string]: {title: string, description: string}}>({});
   const { score, explanation, loading, error, scoreProposalText } = useProposalScoring();
   const { isConnected, signer } = useWeb3();
 
@@ -56,11 +57,11 @@ function App() {
     if (isConnected && signer) {
       initializeContracts(signer);
       // Start with mock data plus any submitted proposals
-      setProposalIds([1, 2, 3, ...submittedProposals]);
+      setProposalIds(['mock1', 'mock2', 'mock3', ...submittedProposals]);
     }
   }, [isConnected, signer, submittedProposals]);
 
-  const handleProposalSubmitted = (proposalId: number, title: string, description: string) => {
+  const handleProposalSubmitted = (proposalId: string, title: string, description: string) => {
     // Add the new proposal ID to the list
     setSubmittedProposals(prev => [...prev, proposalId]);
     setProposalIds(prev => [...prev, proposalId]);
@@ -113,6 +114,7 @@ function App() {
         {isConnected && (
           <>
             <TreasuryDisplay />
+            <RoleManagement />
             <SubmitProposalForm onProposalSubmitted={handleProposalSubmitted} />
             <ProposalList proposalIds={proposalIds} proposalContents={proposalContents} />
 

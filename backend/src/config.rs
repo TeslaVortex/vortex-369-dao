@@ -12,6 +12,14 @@ pub struct VortexConfig {
     pub contracts: ContractAddresses,
     pub relayer: RelayerConfig,
     pub protocols: ProtocolConfig,
+    pub oracle: OracleConfig,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OracleConfig {
+    pub enabled: bool,
+    pub private_key: Option<String>,
+    pub submit_cooldown_ms: u64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -114,6 +122,11 @@ impl VortexConfig {
                 pendle: None,
                 sommelier: None,
             },
+            oracle: OracleConfig {
+                enabled: false,
+                private_key: None,
+                submit_cooldown_ms: 3600000, // 1 hour
+            },
         }
     }
 
@@ -149,6 +162,11 @@ impl VortexConfig {
                 pendle: Some("0x888888888889758F76e7103c6CbF23ABbF58F946".to_string()),
                 sommelier: None,
             },
+            oracle: OracleConfig {
+                enabled: false,
+                private_key: None,
+                submit_cooldown_ms: 3600000, // 1 hour
+            },
         }
     }
 
@@ -183,6 +201,11 @@ impl VortexConfig {
                 morpho: Some("0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb".to_string()),
                 pendle: None,
                 sommelier: Some("0x7bad5DF5E11151Dc5Ee1a648800057C5c934c0d5".to_string()),
+            },
+            oracle: OracleConfig {
+                enabled: false,
+                private_key: None,
+                submit_cooldown_ms: 3600000, // 1 hour
             },
         }
     }

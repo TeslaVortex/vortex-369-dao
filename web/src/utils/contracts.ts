@@ -26,19 +26,25 @@ const NULL_OFFICE_ABI = [
   "function burn() external payable",
 ];
 
+const PELLION_SHIELD_ABI = [
+  "function verifySecret(uint256[2] calldata _pA, uint256[2][2] calldata _pB, uint256[2] calldata _pC, uint256[3] calldata _pubSignals) external view returns (bool)",
+];
+
 // Contract instances
 let vortexDaoContract: ethers.Contract | null = null;
 let nullOfficeContract: ethers.Contract | null = null;
+let pellionShieldContract: ethers.Contract | null = null;
 
 // Initialize contracts with provider/signer
 export const initializeContracts = (signer: ethers.Signer) => {
   vortexDaoContract = new ethers.Contract(CONTRACT_ADDRESSES.VORTEX_DAO, VORTEX_DAO_ABI, signer);
   nullOfficeContract = new ethers.Contract(CONTRACT_ADDRESSES.NULL_OFFICE, NULL_OFFICE_ABI, signer);
+  pellionShieldContract = new ethers.Contract(CONTRACT_ADDRESSES.PELLION_SHIELD || CONTRACT_ADDRESSES.VORTEX_DAO, PELLION_SHIELD_ABI, signer); // Assuming same address or add to addresses
 };
 
 // Proposal types
 export interface Proposal {
-  id: number;
+  id: string;
   proposer: string;
   text: string;
   score: number;
@@ -50,32 +56,32 @@ export interface Proposal {
 }
 
 // DAO functions
-export const submitProposal = async (text: string): Promise<number> => {
+export const submitProposal = async (text: string): Promise<string> => {
   if (!vortexDaoContract) throw new Error('Contracts not initialized');
 
   // Generate a unique hash for the proposal
   const proposalHash = ethers.keccak256(ethers.toUtf8Bytes(text));
 
-  const tx = await vortexDaoContract.submitAction(proposalHash, 432000, ethers.keccak256(ethers.toUtf8Bytes('vector')));
+  const tx = await vortexDaoContract.submitAction(proposalHash, 0, ethers.keccak256(ethers.toUtf8Bytes('vector')));
   const receipt = await tx.wait();
 
   if (!receipt) {
     throw new Error('Transaction failed - no receipt received');
   }
 
-  // For now, return a simple ID since event parsing is unreliable on testnet
+  // For now, return the actionHash as string since event parsing is unreliable on testnet
   // In production, we would parse the event to get the actual proposal ID
-  return Date.now(); // Return timestamp as temporary ID
+  return proposalHash; // Return actionHash as proposal ID
 };
 
-export const getProposal = async (proposalId: number): Promise<Proposal> => {
+export const getProposal = async (proposalId: string): Promise<Proposal> => {
   if (!vortexDaoContract) throw new Error('Contracts not initialized');
 
-  // For now, generate hash from ID since contract uses hashes
-  const proposalHash = ethers.keccak256(ethers.toUtf8Bytes(`proposal-${proposalId}`));
+  // Use the proposalId as the actionHash directly since it's now a string
+  const actionHash = proposalId;
 
   try {
-    const action = await vortexDaoContract.getAction(proposalHash);
+    const action = await vortexDaoContract.getAction(actionHash);
 
     // Convert the returned data to our Proposal interface
     return {
@@ -106,17 +112,19 @@ export const getProposal = async (proposalId: number): Promise<Proposal> => {
   }
 };
 
-export const voteOnProposal = async (proposalId: number, support: boolean): Promise<void> => {
+export const voteOnProposal = async (_proposalId: string, _support: boolean): Promise<void> => {
   if (!vortexDaoContract) throw new Error('Contracts not initialized');
 
-  const tx = await vortexDaoContract.vote(proposalId, support);
-  await tx.wait();
+  // This function might not exist in the contract, as the ABI doesn't have vote
+  // For now, throw error or implement if available
+  throw new Error('Voting not implemented in contract');
 };
 
-export const executeProposal = async (proposalId: number): Promise<void> => {
+export const executeProposal = async (proposalId: string): Promise<void> => {
   if (!vortexDaoContract) throw new Error('Contracts not initialized');
 
-  const tx = await vortexDaoContract.executeProposal(proposalId);
+  // Use proposalId as actionHash
+  const tx = await vortexDaoContract.executeAction(proposalId);
   await tx.wait();
 };
 
@@ -131,5 +139,118 @@ export const burnTokens = async (amount: string): Promise<void> => {
   if (!nullOfficeContract) throw new Error('Contracts not initialized');
 
   const tx = await nullOfficeContract.burn({ value: ethers.parseEther(amount) });
+  await tx.wait();
+};
+
+// Role management functions
+export const grantScorerRole = async (address: string): Promise<void> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  const tx = await vortexDaoContract.grantScorerRole(address);
+  await tx.wait();
+};
+
+export const revokeScorerRole = async (address: string): Promise<void> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  const tx = await vortexDaoContract.revokeScorerRole(address);
+  await tx.wait();
+};
+
+export const grantAdminRole = async (address: string): Promise<void> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  const tx = await vortexDaoContract.grantAdminRole(address);
+  await tx.wait();
+};
+
+export const revokeAdminRole = async (address: string): Promise<void> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  const tx = await vortexDaoContract.revokeAdminRole(address);
+  await tx.wait();
+};
+
+export const grantEmergencyRole = async (address: string): Promise<void> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  const tx = await vortexDaoContract.grantEmergencyRole(address);
+  await tx.wait();
+};
+
+export const revokeEmergencyRole = async (address: string): Promise<void> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  const tx = await vortexDaoContract.revokeEmergencyRole(address);
+  await tx.wait();
+};
+
+export const getAdminConfiguration = async (): Promise<any> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  return await vortexDaoContract.getAdminConfiguration();
+};
+
+export const isMultiSigAdmin = async (address: string): Promise<boolean> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  return await vortexDaoContract.isMultiSigAdmin(address);
+};
+
+// ZK Proof verification
+export const verifyZKProof = async (
+  pA: [string, string],
+  pB: [[string, string], [string, string]],
+  pC: [string, string],
+  pubSignals: [string, string, string]
+): Promise<boolean> => {
+  if (!pellionShieldContract) throw new Error('Contracts not initialized');
+
+  try {
+    const result = await pellionShieldContract.verifySecret(
+      pA.map(x => ethers.toBigInt(x)),
+      pB.map(row => row.map(x => ethers.toBigInt(x))),
+      pC.map(x => ethers.toBigInt(x)),
+      pubSignals.map(x => ethers.toBigInt(x))
+    );
+    return result;
+  } catch (error) {
+    console.error('ZK proof verification failed:', error);
+    return false;
+  }
+};
+
+// Timelock and Multi-sig functions
+export const setTimelock = async (delay: number): Promise<void> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  const tx = await vortexDaoContract.setTimelock(delay);
+  await tx.wait();
+};
+
+export const executeTimelockOperation = async (
+  target: string,
+  value: string,
+  data: string,
+  predecessor: string,
+  salt: string
+): Promise<void> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  const tx = await vortexDaoContract.executeTimelockOperation(target, value, data, predecessor, salt);
+  await tx.wait();
+};
+
+export const scheduleGrantAdminRole = async (address: string): Promise<void> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  const tx = await vortexDaoContract.scheduleGrantAdminRole(address);
+  await tx.wait();
+};
+
+export const transferAdminToSafe = async (): Promise<void> => {
+  if (!vortexDaoContract) throw new Error('Contracts not initialized');
+
+  const tx = await vortexDaoContract.transferAdminToSafe();
   await tx.wait();
 };

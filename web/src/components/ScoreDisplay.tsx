@@ -26,6 +26,7 @@ export const ScoreDisplay: React.FC<ScoreDisplayProps> = React.memo(({ score, ex
     return {
       color: getScoreColor(score),
       label: getScoreLabel(score),
+      score: score,
     };
   }, [score]);
 
@@ -44,13 +45,13 @@ export const ScoreDisplay: React.FC<ScoreDisplayProps> = React.memo(({ score, ex
         marginTop: 0,
         fontSize: '24px',
       }}>
-        Resonance Score: {score}/100
+        Resonance Score: {scoreData.score}/100
       </h2>
 
       {/* 16-Ray Vergina Sun Meter */}
       <div style={{ textAlign: 'center', margin: '16px 0' }}>
         <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="60" cy="60" r="10" fill={score > 66 ? "#FFD700" : "#ccc"} />
+          <circle cx="60" cy="60" r="10" fill={scoreData.score > 66 ? "#FFD700" : "#ccc"} />
           {Array.from({ length: 16 }, (_, i) => {
             const angle = (i * 360) / 16;
             const rad = angle * (Math.PI / 180);
@@ -58,7 +59,7 @@ export const ScoreDisplay: React.FC<ScoreDisplayProps> = React.memo(({ score, ex
             const y1 = 60 + 15 * Math.sin(rad);
             const x2 = 60 + 35 * Math.cos(rad);
             const y2 = 60 + 35 * Math.sin(rad);
-            const filled = score > 66 || i < Math.floor(score * 16 / 100);
+            const filled = scoreData.score > 66 || i < Math.floor(scoreData.score * 16 / 100);
             return (
               <line
                 key={i}

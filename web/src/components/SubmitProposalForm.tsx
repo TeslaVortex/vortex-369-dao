@@ -3,7 +3,7 @@ import { submitProposal } from '../utils/contracts';
 import { useWeb3 } from '../hooks/useWeb3';
 
 interface SubmitProposalFormProps {
-  onProposalSubmitted: (proposalId: number, title: string, description: string) => void;
+  onProposalSubmitted: (proposalId: string, title: string, description: string) => void;
 }
 
 export const SubmitProposalForm: React.FC<SubmitProposalFormProps> = React.memo(({ onProposalSubmitted }) => {
@@ -36,6 +36,29 @@ export const SubmitProposalForm: React.FC<SubmitProposalFormProps> = React.memo(
       const proposalText = `${title.trim()}\n\n${description.trim()}`;
 
       const proposalId = await submitProposal(proposalText);
+
+      // Score the proposal and submit to oracle
+      try {
+        const scoreResponse = await fetch('/score', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: proposalText,
+            proposal_id: proposalId,
+          }),
+        });
+
+        if (scoreResponse.ok) {
+          const scoreData = await scoreResponse.json();
+          console.log('Proposal scored:', scoreData);
+        } else {
+          console.warn('Scoring failed:', await scoreResponse.text());
+        }
+      } catch (scoreError) {
+        console.warn('Scoring API call failed:', scoreError);
+      }
 
       setSuccess(`Proposal submitted successfully! ID: ${proposalId}`);
       setTitle('');
