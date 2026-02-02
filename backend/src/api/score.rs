@@ -3,9 +3,10 @@ use serde::{Deserialize, Serialize};
 use ethers::{
     prelude::*,
     types::Bytes,
-    utils::hex,
 };
 use std::str::FromStr;
+use ethers::utils::hex;
+use std::collections::HashMap;
 use crate::config::VortexConfig;
 
 #[derive(Deserialize)]
