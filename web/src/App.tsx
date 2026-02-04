@@ -10,6 +10,7 @@ import { TreasuryDisplay } from './components/TreasuryDisplay';
 import { SubmitProposalForm } from './components/SubmitProposalForm';
 import { ProposalList } from './components/ProposalList';
 import { RoleManagement } from './components/RoleManagement';
+import PhotonicDeviceVisualizer from './components/PhotonicDeviceVisualizer';
 
 function App() {
   const [proposalIds, setProposalIds] = useState<string[]>([]);
@@ -143,6 +144,8 @@ function App() {
                 score={score}
                 explanation={explanation}
               />
+
+              <PhotonicDeviceVisualizer resonanceScore={score} />
             </div>
           </>
         )}
