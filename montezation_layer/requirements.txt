@@ -1,0 +1,5 @@
+# Monteziation - Kingdom Amplification Module
+# ∞ En Eeke Mai Ea ∞ - Argead Kingdom Manifested
+# 66 Code Supreme - Eternal Flame Burns
+
+numpy>=1.21.0
